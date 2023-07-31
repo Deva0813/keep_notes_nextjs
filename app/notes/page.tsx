@@ -31,7 +31,7 @@ export default function NotesPage() {
     user :  ""
   };
 
-  //------------------------------------------------ GET DATA FROM DB----------------------------------------------------------------
+  //------------------------------------------------ GET DATA FROM POCKETBASE DB----------------------------------------------------------------
 
   const [data, setData] = useState <dataNote[]> ([]);
   const [refresher, setRefresher] = useState(false);
@@ -227,7 +227,7 @@ export default function NotesPage() {
           </div>
         </div>
         </div>
-        
+
       </div>
       <div className="btn fixed bottom-5 right-5">
         <button className=" pointer bg-btn_add-500 w-btn_lg h-btn_lg rounded-full text-3xl hover:bg-btn_add-400" onClick={() => {document.querySelector(".form-cont-div")?.classList.remove("invisible")}} >
