@@ -31,7 +31,7 @@ export default function NotesPage() {
     user :  ""
   };
 
-  //----------------------------------------------------------------------------------------------------------------
+  //------------------------------------------------ GET DATA FROM DB----------------------------------------------------------------
 
   const [data, setData] = useState <dataNote[]> ([]);
   const [refresher, setRefresher] = useState(false);
@@ -78,7 +78,7 @@ export default function NotesPage() {
   }, [refresher]);
 
   
-  //----------------------------------------------------------------------------------------------------------------
+  //----------------------------------------------------CRUD FUNCTIONS------------------------------------------------------------
 
   useEffect(() => {
 
@@ -147,7 +147,7 @@ export default function NotesPage() {
   }
   
 
-  //----------------------------------------------------------------------------------------------------------------
+  //------------------------------------------------------END---------------------------------------------------------
 
   return (
     <div className="relative">
@@ -203,6 +203,7 @@ export default function NotesPage() {
 
 
       <div className=" form-cont-div absolute top-[3px] left-0 w-full h-full flex flex-col items-center justify-center bg-black/50 invisible drop-shadow-2xl shadow-black  " >
+        
         <div className="h-screen flex items-center">
           <div className="lg:w-[600px] mobile:w-[350px] border-2 border-btn_add-700 max-h-full rounded-xl m-5 overflow-hidden" style={{ background: "#F4F2DE" }}>
           <div className=" relative bg-btn_add-300 min-w-full text-end border-b-2 border-btn_add-700 text-lg p-2 pr-3 h-11">
