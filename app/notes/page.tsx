@@ -2,6 +2,20 @@
 import { useEffect, useState } from "react";
 import NavBarComp from "../components/NavBarComp/page";
 import { v4 as uuidv4, v4 } from "uuid";
+import PocketBase from "pocketbase";
+
+const pb = new PocketBase('http://127.0.0.1:8090');
+
+type dataNote = {
+  collectionId: string,
+  collectionName: string,
+  content: string,
+  created: string,
+  id: string,
+  title: string,
+  updated: string,
+  user: string,
+}
 
 export default function NotesPage() {
 
@@ -9,7 +23,6 @@ export default function NotesPage() {
     id: "",
     title: "",
     content: "",
-    date: "",
   });
 
   var newNote = {
@@ -25,35 +38,35 @@ export default function NotesPage() {
 
   //----------------------------------------------------------------------------------------------------------------
 
-  const [data, setData] = useState([
-    {
-      id: "1",
-      title: "Title 1",
-      content:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent consectetur nulla lorem, vel efficitur diam finibus vel. Ut magna odio, bibendum ac sagittis eu, vestibulum ut ante. Vivamus ut pulvinar diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Curabitur ac elit metus. Integer turpis mi, aliquam eu commodo a, elementum vitae metus. Aenean sit amet tellus felis. Ut vitae semper lorem. Donec ut mauris volutpat, lobortis tellus quis, aliquet ligula. Donec consequat lectus sed tortor aliquet, id molestie justo hendrerit. Fusce quis pharetra ex. Nulla facilisi. Integer sit amet accumsan quam. Duis sagittis ullamcorper velit, sed molestie purus venenatis interdum. Nunc tincidunt fringilla lectus non tempor.",
-      date: date_time,
-      lastUpdate: new Date().toUTCString().slice(0, date.length - 4),
-    },
-    {
-      id: "2",
-      title: "Title 2",
-      content:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent consectetur nulla lorem, vel efficitur diam finibus vel. Ut magna odio, bibendum ac sagittis eu, vestibulum ut ante. Vivamus ut pulvinar diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Curabitur ac elit metus. Integer turpis mi, aliquam eu commodo a, elementum vitae metus. Aenean sit amet tellus felis. Ut vitae semper lorem. Donec ut mauris volutpat, lobortis tellus quis, aliquet ligula. Donec consequat lectus sed tortor aliquet, id molestie justo hendrerit. Fusce quis pharetra ex. Nulla facilisi. Integer sit amet accumsan quam. Duis sagittis ullamcorper velit, sed molestie purus venenatis interdum. Nunc tincidunt fringilla lectus non tempor.",
-      date: date_time,
-      lastUpdate: new Date().toUTCString().slice(0, date.length - 4),
-    },
-    {
-      id: "3",
-      title: "Title 3",
-      content:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
-      date: date_time,
-      lastUpdate: new Date().toUTCString().slice(0, date.length - 4),
-    },
-  ]);
+  const [data, setData] = useState <dataNote[]> ([]);
+  
+  useEffect(() => {
+    async function getData() {
+      var userId :string = sessionStorage.getItem('userId') as string;
+      const resultList = await pb.collection('keep_notes_data').getFullList({
+        filter: 'user = "' +userId+ '"'
+      });
+      resultList.forEach((item) => {
+        setData((prev) => [
+          ...prev,
+          {
+            collectionId: item.collectionId,
+            collectionName: item.collectionName,
+            content: item.content,
+            created: item.created,
+            id: item.id,
+            title: item.title,
+            updated: item.updated,
+            user: item.user,
+          },
+        ]);
+      }
+      );
+    }
+    getData();
+  }, []);
 
-
-
+  
   //----------------------------------------------------------------------------------------------------------------
 
   useEffect(() => {
@@ -83,11 +96,10 @@ export default function NotesPage() {
       id: selectedNote.id,
       title: selectedNote.title,
       content: e.target.value,
-      date: selectedNote.date,
     });
   };
 
-  function handleAddNote() {
+  async function handleAddNote() {
     const form = document.querySelector("form") as HTMLFormElement;
     const formdata = new FormData(form);
 
@@ -106,7 +118,7 @@ export default function NotesPage() {
 
     document.querySelector(".form-cont-div")?.classList.add("invisible");
 
-    setData([...data, newNote]);
+    
 
   }
 
@@ -125,7 +137,6 @@ export default function NotesPage() {
                   id: item.id,
                   title: item.title,
                   content: item.content,
-                  date: item.date,
                 });
               }
             }>

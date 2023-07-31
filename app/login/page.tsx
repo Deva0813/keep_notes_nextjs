@@ -2,13 +2,36 @@
 import clsx from "clsx";
 import NavBarComp from "../components/NavBarComp/page";
 import { Ubuntu } from "next/font/google";
+import PocketBase from 'pocketbase';
+
+const pb = new PocketBase('http://127.0.0.1:8090');
 
 const loginTxt = Ubuntu({
   subsets: ['latin'],
-  weight:["700"],
+  weight: ["700"],
 })
 
 export default function Login() {
+
+  async function login() {
+    const email = (document.getElementById("email") as HTMLInputElement).value;
+    const password = (document.getElementById("password") as HTMLInputElement).value;
+    console.log(email, password);
+
+    try {
+      const record = await pb.collection('keep_notes_users').getFirstListItem('email="'+email+'" && password="'+password+'"');
+      window.sessionStorage.setItem('userId', record.id) ;
+      window.sessionStorage.setItem('user', JSON.stringify(record)) ;
+      window.sessionStorage.setItem('logedIn', 'true') ;
+      window.sessionStorage.setItem('email', email) ;
+      window.sessionStorage.setItem('password', password) ;
+      
+      window.location.href = "/notes";
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
 
   return (
     <div>
@@ -21,29 +44,29 @@ export default function Login() {
             <span className="pr-1 text-blue-400 ">●</span>
             <span className="pr-1 text-red-400 ">●</span>
           </div>
-        
-            <div className="form flex items-center justify-center text-btn_add-800 text-lg font-mono font-semibold flex-col ">
-              <div className="text-4xl p-4 pt-6">
-                <span className={clsx("text-btn_add-800",loginTxt.className)}>Login</span>
-              </div>
-              <div className="">
-                <label className="m-1 ml-2 pointer" htmlFor="email">Email</label><br />
-                <input type="email" id="email" name="email" placeholder="Email" className= " text-cursor m-1 h-10 w-80 border-2 border-btn_add-700 rounded-xl p-3" />
-              </div>
-              <div className="">
-                <label className="m-1 ml-2 pointer" htmlFor="password">Password</label><br />
-                <input type="password" id="password" name="password" placeholder="Password" className=" text-cursor m-1 h-10 w-80 border-2 border-btn_add-700 rounded-xl p-3" />
-              </div>
 
-              <div className="flex items-center justify-center w-80 mt-5 mb-6">
-                <button className="m-2 bg-btn_add-500 w-32 h-10 rounded-xl pointer hover:bg-btn_add-400" >Login</button>
-                <button className="m-2 text-header_text bg-color1-500 w-32 h-10 rounded-xl pointer hover:bg-color1-400" onClick={()=>{window.location.href="/signup";}} >Register</button>
-              </div>
-
+          <div className="form flex items-center justify-center text-btn_add-800 text-lg font-mono font-semibold flex-col ">
+            <div className="text-4xl p-4 pt-6">
+              <span className={clsx("text-btn_add-800", loginTxt.className)}>Login</span>
+            </div>
+            <div className="">
+              <label className="m-1 ml-2 pointer" htmlFor="email">Email</label><br />
+              <input type="email" id="email" name="email" placeholder="Email" className=" text-cursor m-1 h-10 w-80 border-2 border-btn_add-700 rounded-xl p-3" />
+            </div>
+            <div className="">
+              <label className="m-1 ml-2 pointer" htmlFor="password">Password</label><br />
+              <input type="password" id="password" name="password" placeholder="Password" className=" text-cursor m-1 h-10 w-80 border-2 border-btn_add-700 rounded-xl p-3" />
             </div>
 
+            <div className="flex items-center justify-center w-80 mt-5 mb-6">
+              <button className="m-2 bg-btn_add-500 w-32 h-10 rounded-xl pointer hover:bg-btn_add-400" onClick={login} >Login</button>
+              <button className="m-2 text-header_text bg-color1-500 w-32 h-10 rounded-xl pointer hover:bg-color1-400" onClick={() => { window.location.href = "/signup"; }} >Register</button>
+            </div>
+
+          </div>
+
         </div>
-      </div> 
+      </div>
     </div>
   );
 }

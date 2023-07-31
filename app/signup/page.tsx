@@ -2,6 +2,9 @@
 import clsx from "clsx";
 import NavBarComp from "../components/NavBarComp/page";
 import { Ubuntu } from "next/font/google";
+import PocketBase from 'pocketbase';
+
+const pb = new PocketBase('http://127.0.0.1:8090');
 
 const loginTxt = Ubuntu({
   subsets: ['latin'],
@@ -9,6 +12,42 @@ const loginTxt = Ubuntu({
 })
 
 export default function Signup() {
+
+
+
+  async function signup() {
+    const name = (document.getElementById("name") as HTMLInputElement).value;
+    const email = (document.getElementById("email") as HTMLInputElement).value;
+    const password = (document.getElementById("password") as HTMLInputElement).value;
+    const confirmPassword = (document.getElementById("cpassword") as HTMLInputElement).value;
+
+    if(validateEmail(email) === false){
+      alert("Invalid email");
+      return;
+    }
+    
+    if (password !== confirmPassword) {
+      alert("Passwords don't match");
+      return;
+    } else {
+      console.log(name, email, password);
+
+      const record = await pb.collection('keep_notes_users').create({
+        username: name,
+        email: email,
+        password: password,
+      });
+
+      console.log(record);
+    }
+
+  }
+
+  function validateEmail(email: string) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
+
   return (
     <div>
       <NavBarComp />
@@ -43,8 +82,8 @@ export default function Signup() {
             </div>
 
             <div className="flex items-center justify-center w-80 mt-5 mb-6">
-              <button className="m-2 bg-green-400 w-32 h-10 rounded-xl pointer hover:bg-green-300">Register</button>
-              <button className="m-2 bg-btn_add-500 w-32 h-10 rounded-xl pointer hover:bg-btn_add-400" onClick={()=>{window.location.href="/login"}} >Login</button>
+              <button className="m-2 bg-green-400 w-32 h-10 rounded-xl pointer hover:bg-green-300" onClick={signup} >Register</button>
+              <button className="m-2 bg-btn_add-500 w-32 h-10 rounded-xl pointer hover:bg-btn_add-400" onClick={() => { window.location.href = "/login" }} >Login</button>
             </div>
 
           </div>
