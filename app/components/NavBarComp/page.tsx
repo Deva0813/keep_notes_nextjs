@@ -38,7 +38,7 @@ export default function NavBarComp() {
 
   return (
     <header className=' z-20 container-fluid bg-header text-header_text min-h-header sticky top-0 '>
-      <div className="container flex justify-between items-center p-4 mobile:px-0 mobile:text-sm mx-auto text-lg">
+      <div className="container flex justify-between items-center p-4   mx-auto text-lg sm:text-lg mobile:px-0  mobile:text-sm">
         <h1 className={clsx(" font-bold text-2xl", title.className)} ><Link href={logedIn ? "/notes" : "/"} className="pointer">Keep Notes</Link></h1>
         <div className=" flex gap-5 font-semibold ">
           <button className=" hover:text-header_text/75 pointer" >About</button>

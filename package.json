@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    
+    "dev-windows":" concurrently \"next dev\" \".\\pocketbase.exe serve\" ",
+    "dev-linux":" concurrently \"next dev\" \"./pocketbase serve\" "
   },
   "dependencies": {
     "@types/node": "20.4.5",
@@ -15,6 +16,7 @@
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.14",
     "clsx": "^1.2.1",
+    "concurrently": "^8.2.0",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
     "next": "13.4.12",
