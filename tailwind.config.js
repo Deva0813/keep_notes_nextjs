@@ -35,7 +35,7 @@ module.exports = {
         },
       },
       screens: {
-        'mobile': '400px',
+        'mobile': '300px',
         'tablet': '640px',
         'laptop': '1024px',
         'desktop': '1280px',

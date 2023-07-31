@@ -4,7 +4,7 @@ import NavBarComp from "../components/NavBarComp/page";
 import { Ubuntu } from "next/font/google";
 import PocketBase from 'pocketbase';
 
-const pb = new PocketBase('http://127.0.0.1:8090');
+const pb = new PocketBase('/');
 
 const loginTxt = Ubuntu({
   subsets: ['latin'],
@@ -37,7 +37,7 @@ export default function Login() {
     <div>
       <NavBarComp />
       <div className="container mx-auto min-h-body flex flex-col items-center justify-center ">
-        <div className="w-96 h-auto rounded-lg border-2 border-btn_add-700 overflow-hidden ">
+        <div className="w-96 mobile:scale-90 h-auto rounded-lg border-2 border-btn_add-700 overflow-hidden ">
           <div className=" relative bg-btn_add-300 min-w-full text-end border-b-2 border-btn_add-700 text-xl p-1 pr-2">
             <span className="absolute left-4 top-2 text-btn_add-800 font-semibold text-sm" >Login</span>
             <span className="pr-1 text-green-400">●</span>

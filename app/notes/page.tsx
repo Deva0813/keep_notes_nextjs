@@ -1,10 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import NavBarComp from "../components/NavBarComp/page";
-import { v4 as uuidv4, v4 } from "uuid";
 import PocketBase from "pocketbase";
 
-const pb = new PocketBase('http://127.0.0.1:8090');
+const pb = new PocketBase('/');
 
 type dataNote = {
   collectionId: string,
@@ -26,11 +25,9 @@ export default function NotesPage() {
   });
 
   var newNote = {
-    id: "",
     title: "",
     content: "",
-    date: "",
-    lastUpdate: "",
+    user :  ""
   };
 
   var date = new Date().toUTCString();
@@ -39,32 +36,48 @@ export default function NotesPage() {
   //----------------------------------------------------------------------------------------------------------------
 
   const [data, setData] = useState <dataNote[]> ([]);
+  const [refresher, setRefresher] = useState(false);
   
   useEffect(() => {
+    
+    //clearState();
+
+    setData([]);
+
+    var count = 1;
     async function getData() {
       var userId :string = sessionStorage.getItem('userId') as string;
-      const resultList = await pb.collection('keep_notes_data').getFullList({
-        filter: 'user = "' +userId+ '"'
-      });
-      resultList.forEach((item) => {
-        setData((prev) => [
-          ...prev,
-          {
-            collectionId: item.collectionId,
-            collectionName: item.collectionName,
-            content: item.content,
-            created: item.created,
-            id: item.id,
-            title: item.title,
-            updated: item.updated,
-            user: item.user,
-          },
-        ]);
+      try {
+        const resultList = await pb.collection('keep_notes_data').getFullList({
+          filter: 'user = "' +userId+ '"' ,
+        });
+        resultList.forEach((item) => {
+          setData((prev) => [
+            ...prev,
+            {
+              collectionId: item.collectionId,
+              collectionName: item.collectionName,
+              content: item.content,
+              created: item.created,
+              id: item.id,
+              title: item.title,
+              updated: item.updated,
+              user: item.user,
+            },
+          ]);
+        }
+        );
+      } catch (error) {
       }
-      );
     }
-    getData();
-  }, []);
+    
+    if(count == 1){
+      getData();
+      setRefresher(false);
+      count--;
+    }
+
+  }, [refresher]);
 
   
   //----------------------------------------------------------------------------------------------------------------
@@ -87,8 +100,11 @@ export default function NotesPage() {
     console.log(selectedNote.content);
   };
 
-  function handleDelete() {
-    console.log(selectedNote.id);
+  async function handleDelete() {
+    await pb.collection('keep_notes_data').delete(selectedNote.id);
+    document.querySelector(".big-note-cont")?.classList.add("invisible");
+    setRefresher(true);
+    
   };
 
   function handleChanges(e: any) {
@@ -107,20 +123,21 @@ export default function NotesPage() {
     const content = formdata.get("content_in") as string;
 
     newNote = {
-      id: uuidv4(),
       title: title,
       content: content,
-      date: date_time,
-      lastUpdate: new Date().toUTCString().slice(0, date.length - 4),
+      user :  sessionStorage.getItem('userId') as string,
     };
 
     form.reset();
 
     document.querySelector(".form-cont-div")?.classList.add("invisible");
 
-    
+    const record = await pb.collection('keep_notes_data').create(newNote);
 
+    setRefresher(true);
+    
   }
+  
 
   //----------------------------------------------------------------------------------------------------------------
 
@@ -129,9 +146,9 @@ export default function NotesPage() {
       <NavBarComp />
 
       <div className="container min-h-body mx-auto pt-5 flex flex-col items-center">
-        <div className="grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4 ">
+        <div className="grid grid-cols-1 mobile:relative tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4 ">
           {data.map((item) => (
-            <button key={item.id} className="w-80 pointer relative border-2 border-btn_add-700 h-56 rounded-lg m-5 overflow-hidden" style={{ background: "#F4F2DE" }} onClick={
+            <button key={item.id} className="w-80 mobile:left-[-20px] tablet:left-0 pointer relative border-2 border-btn_add-700 h-56 rounded-lg m-5 mobile:m-3 overflow-hidden" style={{ background: "#F4F2DE" }} onClick={
               () => {
                 setSelectedNote({
                   id: item.id,
@@ -145,7 +162,10 @@ export default function NotesPage() {
                 <span className="pr-1">🎯</span>
               </div>
               <div className=" absolute top-8 px-1 py-2">
-                <p className="text-btn_add-800 line-clamp-6 m-3 text-left">{item.content}</p>
+                <p className="text-btn_add-800 line-clamp-5 m-3 text-left">{item.content}</p>
+              </div>
+              <div className="absolute text-right bottom-0 p-2 w-full text-xs ">
+                <p>Last Modified : {(item.updated).slice(0, date.length - 19)}</p>
               </div>
             </button>
           ))}
@@ -182,8 +202,8 @@ export default function NotesPage() {
             <div className="p-2 m-3 w-full ">
               <form className="flex flex-col items-center justify-center">
                 <label htmlFor=""></label>
-                <input type="text" name="title_in" id="title_in" className="text-cursor text-btn_add-800 m-3 lg:w-[500px] mobile:w-[270px] p-3 min-h-fit max-h-[500px] resize-none outline-none border-2 border-btn_add-700 rounded-lg" placeholder="Title" />
-                <textarea rows={10} name="content_in" id="content_in" className="text-cursor text-btn_add-800 m-3 lg:w-[500px] mobile:w-[270px] p-3 min-h-fit max-h-[500px] resize-none outline-none border-2 border-btn_add-700 rounded-lg" placeholder="Content" ></textarea>
+                <input type="text" name="title_in" id="title_in" className="text-cursor text-btn_add-800 m-3 sm:m-1 lg:w-[500px] mobile:w-[270px] p-3 min-h-fit max-h-[500px] resize-none outline-none border-2 border-btn_add-700 rounded-lg" placeholder="Title" />
+                <textarea rows={10} name="content_in" id="content_in" className="text-cursor text-btn_add-800 m-3 sm:m-1 lg:w-[500px] mobile:w-[270px] p-3 min-h-fit max-h-[500px] resize-none outline-none border-2 border-btn_add-700 rounded-lg" placeholder="Content" ></textarea>
 
               </form>
               <div className=" flex flex-row w-full justify-end px-5" >
