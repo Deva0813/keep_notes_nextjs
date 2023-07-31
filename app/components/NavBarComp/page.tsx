@@ -10,12 +10,7 @@ const title = Ubuntu({
   subsets: ['latin']
 })
 
-interface NavBarCompProps {
-  className?: string;
-  hidden?: boolean;
-}
-
-export default function NavBarComp(props: NavBarCompProps) {
+export default function NavBarComp() {
 
   const [logedIn, setLogedIn] = useState(false);
 
