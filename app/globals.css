@@ -2,40 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-/* custom scroll */
+@layer base {
+  /* custom scroll */
 
-::-webkit-scrollbar {
-  width: 5px;
-}
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
 
-::-webkit-scrollbar-thumb {
-  background: #116A7B;
-}
+  ::-webkit-scrollbar-thumb {
+    background: #116a7b;
+  }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #093942;
-}
+  ::-webkit-scrollbar-thumb:hover {
+    background: #093942;
+  }
 
-/* smooth scroll */
+  /* smooth scroll */
 
-html {
-  scroll-behavior: smooth;
-}
+  html {
+    scroll-behavior: smooth;
+  }
 
-/* custom cursor */
+  /* custom cursor */
 
-.default {
-  cursor: url(../public/icons8-cursor-32.cur), default;
-}
+  .default {
+    cursor: url(../public/icons8-cursor-32.cur), default;
+  }
 
-.pointer {
-  cursor: url(../public/pointer1.png), pointer;
-}
+  .pointer {
+    cursor: url(../public/pointer1.png), pointer;
+  }
 
-.text-cursor {
-  cursor: url(../public/icons8-line-25.png), text;
+  .text-cursor {
+    cursor: url(../public/icons8-line-25.png), text;
+  }
 }
