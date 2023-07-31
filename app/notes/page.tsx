@@ -22,6 +22,7 @@ export default function NotesPage() {
     id: "",
     title: "",
     content: "",
+    user :  ""
   });
 
   var newNote = {
@@ -29,9 +30,6 @@ export default function NotesPage() {
     content: "",
     user :  ""
   };
-
-  var date = new Date().toUTCString();
-  var date_time = date.slice(0, date.length - 4);
 
   //----------------------------------------------------------------------------------------------------------------
 
@@ -95,16 +93,25 @@ export default function NotesPage() {
   }, [selectedNote]);
 
 
-  function handleSave() {
+  async function handleSave() {
     console.log(selectedNote.id);
     console.log(selectedNote.content);
+
+    const record = await pb.collection('keep_notes_data').update(selectedNote.id,{
+      title: selectedNote.title,
+      content: selectedNote.content,
+      user :  selectedNote.user,
+    } );
+
+    console.log(record);
+    document.querySelector(".big-note-cont")?.classList.add("invisible"); 
+    setRefresher(true);   
   };
 
   async function handleDelete() {
     await pb.collection('keep_notes_data').delete(selectedNote.id);
     document.querySelector(".big-note-cont")?.classList.add("invisible");
     setRefresher(true);
-    
   };
 
   function handleChanges(e: any) {
@@ -112,6 +119,7 @@ export default function NotesPage() {
       id: selectedNote.id,
       title: selectedNote.title,
       content: e.target.value,
+      user :  selectedNote.user,
     });
   };
 
@@ -148,12 +156,13 @@ export default function NotesPage() {
       <div className="container min-h-body mx-auto pt-5 flex flex-col items-center">
         <div className="grid grid-cols-1 mobile:relative tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4 ">
           {data.map((item) => (
-            <button key={item.id} className="w-80 mobile:left-[-20px] tablet:left-0 pointer relative border-2 border-btn_add-700 h-56 rounded-lg m-5 mobile:m-3 overflow-hidden" style={{ background: "#F4F2DE" }} onClick={
+            <button key={item.id} className="w-80 mobile:left-[-20px] tablet:left-0 pointer relative border-2 border-btn_add-700 h-56 rounded-lg m-5 mobile:m-3 overflow-hidden drop-shadow-md hover:drop-shadow-2xl transition-all delay-50 hover:top-1 ease-linear shadow-btn_add-600  " style={{ background: "#fff" }} onClick={
               () => {
                 setSelectedNote({
                   id: item.id,
                   title: item.title,
                   content: item.content,
+                  user :  item.user,
                 });
               }
             }>
@@ -165,22 +174,23 @@ export default function NotesPage() {
                 <p className="text-btn_add-800 line-clamp-5 m-3 text-left">{item.content}</p>
               </div>
               <div className="absolute text-right bottom-0 p-2 w-full text-xs ">
-                <p>Last Modified : {(item.updated).slice(0, date.length - 19)}</p>
+                <p>Last Modified : {(item.updated).slice(0, item.updated.length - 13)}</p>
               </div>
             </button>
           ))}
         </div>
       </div>
 
-      <div className=" big-note-cont absolute top-[3px] left-0 w-full h-full flex flex-col items-center justify-center bg-black/50 invisible" >
-        <div className="lg:w-[600px] mobile:w-[350px] border-2 border-btn_add-700 max-h-full rounded-xl m-5 overflow-hidden" style={{ background: "#F4F2DE" }}>
+      <div className=" big-note-cont fixed top-[3px] left-0 w-full h-full flex flex-col items-center justify-center bg-black/50 invisible" >
+        <div className=" absolute top-0 h-screen flex items-center">
+          <div className="lg:w-[600px] mobile:w-[350px] border-2 border-btn_add-700 max-h-full rounded-xl m-5 overflow-hidden drop-shadow-2xl shadow-black " style={{ background: "#F4F2DE" }}>
           <div className=" relative bg-btn_add-300 min-w-full text-end border-b-2 border-btn_add-700 text-lg p-2 pr-3 h-11">
             <span className="absolute left-4 top-2 text-btn_add-800 text-start font-semibold lg:w-[400px] mobile:w-[200px] truncate" >{selectedNote.title}</span>
             <span className="pr-1 text-md pointer opacity-70 hover:opacity-100 " onClick={() => { document.querySelector(".big-note-cont")?.classList.add("invisible") }} >❌</span>
           </div>
           <div className="px-1 py-2 flex flex-row items-center justify-center">
             <div className="p-2 m-3 bg-white rounded-lg border-2 border-btn_add-700 ">
-              <textarea rows={10} className="text-cursor text-btn_add-800 m-3 lg:w-[500px] mobile:w-[270px] p-3 min-h-fit max-h-[500px] resize-none outline-none " spellCheck="false" defaultValue={selectedNote.content} onChange={handleChanges} ></textarea>
+              <textarea rows={10} className="text-cursor text-btn_add-800 m-3 lg:w-[500px] mobile:w-[270px] p-3 min-h-fit max-h-[500px] resize-none outline-none " spellCheck="false" value={selectedNote.content} onChange={handleChanges} ></textarea>
             </div>
           </div>
           <div className="flex items-center justify-end w-full px-5 pb-4 font-semibold ">
@@ -188,11 +198,14 @@ export default function NotesPage() {
             <button className="m-2 text-red-900 bg-red-300 w-32 h-10 rounded-xl pointer hover:bg-red-200" onClick={handleDelete} >Delete</button>
           </div>
         </div>
+        </div>
+        
       </div>
 
 
-      <div className=" form-cont-div absolute top-[3px] left-0 w-full h-full flex flex-col items-center justify-center bg-black/50 invisible " >
-        <div className="lg:w-[600px] mobile:w-[350px] border-2 border-btn_add-700 max-h-full rounded-xl m-5 overflow-hidden" style={{ background: "#F4F2DE" }}>
+      <div className=" form-cont-div absolute top-[3px] left-0 w-full h-full flex flex-col items-center justify-center bg-black/50 invisible drop-shadow-2xl shadow-black  " >
+        <div className="h-screen flex items-center">
+          <div className="lg:w-[600px] mobile:w-[350px] border-2 border-btn_add-700 max-h-full rounded-xl m-5 overflow-hidden" style={{ background: "#F4F2DE" }}>
           <div className=" relative bg-btn_add-300 min-w-full text-end border-b-2 border-btn_add-700 text-lg p-2 pr-3 h-11">
             <span className="absolute left-4 top-2 text-btn_add-800 text-start font-semibold lg:w-[400px] mobile:w-[200px] truncate" > Add Notes </span>
             <span className="pr-1 text-md pointer opacity-70 hover:opacity-100 " onClick={() => { document.querySelector(".form-cont-div")?.classList.add("invisible") }} >❌</span>
@@ -212,8 +225,9 @@ export default function NotesPage() {
               </div>
             </div>
           </div>
-
         </div>
+        </div>
+        
       </div>
       <div className="btn fixed bottom-5 right-5">
         <button className=" pointer bg-btn_add-500 w-btn_lg h-btn_lg rounded-full text-3xl hover:bg-btn_add-400" onClick={() => {document.querySelector(".form-cont-div")?.classList.remove("invisible")}} >

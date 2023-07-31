@@ -39,6 +39,7 @@ export default function Signup() {
       });
 
       console.log(record);
+      window.location.href = "/login";
     }
 
   }
@@ -52,7 +53,7 @@ export default function Signup() {
     <div>
       <NavBarComp />
       <div className="container mx-auto min-h-body flex flex-col items-center justify-center ">
-        <div className="w-96 mobile:scale-90 h-auto rounded-lg border-2 border-btn_add-700 overflow-hidden ">
+        <div className="w-96 mobile:scale-90 laptop:scale-100 h-auto rounded-lg border-2 border-btn_add-700 overflow-hidden ">
           <div className=" relative bg-btn_add-300 min-w-full text-end border-b-2 border-btn_add-700 text-xl p-1 pr-2">
             <span className="absolute left-4 top-2 text-btn_add-800 font-semibold text-sm" >Signup</span>
             <span className="pr-1 text-green-400">●</span>
