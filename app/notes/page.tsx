@@ -22,32 +22,32 @@ export default function NotesPage() {
     id: "",
     title: "",
     content: "",
-    user :  ""
+    user: ""
   });
 
   var newNote = {
     title: "",
     content: "",
-    user :  ""
+    user: ""
   };
 
   //------------------------------------------------ GET DATA FROM POCKETBASE DB----------------------------------------------------------------
 
-  const [data, setData] = useState <dataNote[]> ([]);
+  const [data, setData] = useState<dataNote[]>([]);
   const [refresher, setRefresher] = useState(false);
-  
+
   useEffect(() => {
-    
+
     //clearState();
 
     setData([]);
 
     var count = 1;
     async function getData() {
-      var userId :string = sessionStorage.getItem('userId') as string;
+      var userId: string = sessionStorage.getItem('userId') as string;
       try {
         const resultList = await pb.collection('keep_notes_data').getFullList({
-          filter: 'user = "' +userId+ '"' ,
+          filter: 'user = "' + userId + '"',
         });
         resultList.forEach((item) => {
           setData((prev) => [
@@ -68,8 +68,8 @@ export default function NotesPage() {
       } catch (error) {
       }
     }
-    
-    if(count == 1){
+
+    if (count == 1) {
       getData();
       setRefresher(false);
       count--;
@@ -77,7 +77,7 @@ export default function NotesPage() {
 
   }, [refresher]);
 
-  
+
   //----------------------------------------------------CRUD FUNCTIONS------------------------------------------------------------
 
   useEffect(() => {
@@ -97,15 +97,15 @@ export default function NotesPage() {
     console.log(selectedNote.id);
     console.log(selectedNote.content);
 
-    const record = await pb.collection('keep_notes_data').update(selectedNote.id,{
+    const record = await pb.collection('keep_notes_data').update(selectedNote.id, {
       title: selectedNote.title,
       content: selectedNote.content,
-      user :  selectedNote.user,
-    } );
+      user: selectedNote.user,
+    });
 
     console.log(record);
-    document.querySelector(".big-note-cont")?.classList.add("invisible"); 
-    setRefresher(true);   
+    document.querySelector(".big-note-cont")?.classList.add("invisible");
+    setRefresher(true);
   };
 
   async function handleDelete() {
@@ -119,7 +119,7 @@ export default function NotesPage() {
       id: selectedNote.id,
       title: selectedNote.title,
       content: e.target.value,
-      user :  selectedNote.user,
+      user: selectedNote.user,
     });
   };
 
@@ -133,7 +133,7 @@ export default function NotesPage() {
     newNote = {
       title: title,
       content: content,
-      user :  sessionStorage.getItem('userId') as string,
+      user: sessionStorage.getItem('userId') as string,
     };
 
     form.reset();
@@ -143,9 +143,9 @@ export default function NotesPage() {
     const record = await pb.collection('keep_notes_data').create(newNote);
 
     setRefresher(true);
-    
+
   }
-  
+
 
   //------------------------------------------------------END---------------------------------------------------------
 
@@ -153,16 +153,19 @@ export default function NotesPage() {
     <div className="relative">
       <NavBarComp />
 
-      <div className="container min-h-body mx-auto pt-5 flex flex-col items-center">
-        <div className="grid grid-cols-1 mobile:relative tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4 ">
+      <div className=" relative container min-h-body mx-auto pt-5 flex flex-col items-center">
+        <div className=" absolute top-0 left-[-50px] text-sm md:left-0 sub-title-txt p-3 px-4">
+          <p className="text-btn_add-600" >Homepage&nbsp;/&nbsp;<span className=" text-btn_add-700 font-semibold " >Your Notes</span> </p>
+        </div>
+        <div className="grid grid-cols-1  pt-5 w-full mobile:relative tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4">
           {data.map((item) => (
-            <button key={item.id} className="w-80 mobile:left-[-20px] tablet:left-0 pointer relative border-2 border-btn_add-700 h-56 rounded-lg m-5 mobile:m-3 overflow-hidden drop-shadow-md hover:drop-shadow-2xl transition-all delay-50 hover:top-1 ease-linear shadow-btn_add-600  " style={{ background: "#fff" }} onClick={
+            <button key={item.id} className="w-80 left-[-20px] md:left-[0px] laptop:left-5 pointer relative border-2 border-btn_add-700 h-56 rounded-lg m-5 mobile:m-3 overflow-hidden drop-shadow-md hover:drop-shadow-2xl transition-all delay-50 hover:top-1 ease-linear shadow-btn_add-600  " style={{ background: "#fff" }} onClick={
               () => {
                 setSelectedNote({
                   id: item.id,
                   title: item.title,
                   content: item.content,
-                  user :  item.user,
+                  user: item.user,
                 });
               }
             }>
@@ -184,53 +187,53 @@ export default function NotesPage() {
       <div className=" big-note-cont fixed top-[3px] left-0 w-full h-full flex flex-col items-center justify-center bg-black/50 invisible" >
         <div className=" absolute top-0 h-screen flex items-center">
           <div className="lg:w-[600px] mobile:w-[350px] border-2 border-btn_add-700 max-h-full rounded-xl m-5 overflow-hidden drop-shadow-2xl shadow-black " style={{ background: "#F4F2DE" }}>
-          <div className=" relative bg-btn_add-300 min-w-full text-end border-b-2 border-btn_add-700 text-lg p-2 pr-3 h-11">
-            <span className="absolute left-4 top-2 text-btn_add-800 text-start font-semibold lg:w-[400px] mobile:w-[200px] truncate" >{selectedNote.title}</span>
-            <span className="pr-1 text-md pointer opacity-70 hover:opacity-100 " onClick={() => { document.querySelector(".big-note-cont")?.classList.add("invisible") }} >❌</span>
-          </div>
-          <div className="px-1 py-2 flex flex-row items-center justify-center">
-            <div className="p-2 m-3 bg-white rounded-lg border-2 border-btn_add-700 ">
-              <textarea rows={10} className="text-cursor text-btn_add-800 m-3 lg:w-[500px] mobile:w-[270px] p-3 min-h-fit max-h-[500px] resize-none outline-none " spellCheck="false" value={selectedNote.content} onChange={handleChanges} ></textarea>
+            <div className=" relative bg-btn_add-300 min-w-full text-end border-b-2 border-btn_add-700 text-lg p-2 pr-3 h-11">
+              <span className="absolute left-4 top-2 text-btn_add-800 text-start font-semibold lg:w-[400px] mobile:w-[200px] truncate" >{selectedNote.title}</span>
+              <span className="pr-1 text-md pointer opacity-70 hover:opacity-100 " onClick={() => { document.querySelector(".big-note-cont")?.classList.add("invisible") }} >❌</span>
+            </div>
+            <div className="px-1 py-2 flex flex-row items-center justify-center">
+              <div className="p-2 m-3 bg-white rounded-lg border-2 border-btn_add-700 ">
+                <textarea rows={10} className="text-cursor text-btn_add-800 m-3 lg:w-[500px] mobile:w-[270px] p-3 min-h-fit max-h-[500px] resize-none outline-none " spellCheck="false" value={selectedNote.content} onChange={handleChanges} ></textarea>
+              </div>
+            </div>
+            <div className="flex items-center justify-end w-full px-5 pb-4 font-semibold ">
+              <button className="m-2 text-green-900 bg-green-300 w-32 h-10 rounded-xl pointer hover:bg-green-200" onClick={handleSave} >Save</button>
+              <button className="m-2 text-red-900 bg-red-300 w-32 h-10 rounded-xl pointer hover:bg-red-200" onClick={handleDelete} >Delete</button>
             </div>
           </div>
-          <div className="flex items-center justify-end w-full px-5 pb-4 font-semibold ">
-            <button className="m-2 text-green-900 bg-green-300 w-32 h-10 rounded-xl pointer hover:bg-green-200" onClick={handleSave} >Save</button>
-            <button className="m-2 text-red-900 bg-red-300 w-32 h-10 rounded-xl pointer hover:bg-red-200" onClick={handleDelete} >Delete</button>
-          </div>
-        </div>
         </div>
       </div>
 
 
       <div className=" form-cont-div absolute top-[3px] left-0 w-full h-full flex flex-col items-center justify-center bg-black/50 invisible drop-shadow-2xl shadow-black  " >
-        
+
         <div className="h-screen flex items-center">
           <div className="lg:w-[600px] mobile:w-[350px] border-2 border-btn_add-700 max-h-full rounded-xl m-5 overflow-hidden" style={{ background: "#F4F2DE" }}>
-          <div className=" relative bg-btn_add-300 min-w-full text-end border-b-2 border-btn_add-700 text-lg p-2 pr-3 h-11">
-            <span className="absolute left-4 top-2 text-btn_add-800 text-start font-semibold lg:w-[400px] mobile:w-[200px] truncate" > Add Notes </span>
-            <span className="pr-1 text-md pointer opacity-70 hover:opacity-100 " onClick={() => { document.querySelector(".form-cont-div")?.classList.add("invisible") }} >❌</span>
-          </div>
+            <div className=" relative bg-btn_add-300 min-w-full text-end border-b-2 border-btn_add-700 text-lg p-2 pr-3 h-11">
+              <span className="absolute left-4 top-2 text-btn_add-800 text-start font-semibold lg:w-[400px] mobile:w-[200px] truncate" > Add Notes </span>
+              <span className="pr-1 text-md pointer opacity-70 hover:opacity-100 " onClick={() => { document.querySelector(".form-cont-div")?.classList.add("invisible") }} >❌</span>
+            </div>
 
-          <div className="px-1 py-2 flex flex-row items-center justify-center">
-            <div className="p-2 m-3 w-full ">
-              <form className="flex flex-col items-center justify-center">
-                <label htmlFor=""></label>
-                <input type="text" name="title_in" id="title_in" className="text-cursor text-btn_add-800 m-3 sm:m-1 lg:w-[500px] mobile:w-[270px] p-3 min-h-fit max-h-[500px] resize-none outline-none border-2 border-btn_add-700 rounded-lg" placeholder="Title" />
-                <textarea rows={10} name="content_in" id="content_in" className="text-cursor text-btn_add-800 m-3 sm:m-1 lg:w-[500px] mobile:w-[270px] p-3 min-h-fit max-h-[500px] resize-none outline-none border-2 border-btn_add-700 rounded-lg" placeholder="Content" ></textarea>
+            <div className="px-1 py-2 flex flex-row items-center justify-center">
+              <div className="p-2 m-3 w-full ">
+                <form className="flex flex-col items-center justify-center">
+                  <label htmlFor=""></label>
+                  <input type="text" name="title_in" id="title_in" className="text-cursor text-btn_add-800 m-3 sm:m-1 lg:w-[500px] mobile:w-[270px] p-3 min-h-fit max-h-[500px] resize-none outline-none border-2 border-btn_add-700 rounded-lg" placeholder="Title" />
+                  <textarea rows={10} name="content_in" id="content_in" className="text-cursor text-btn_add-800 m-3 sm:m-1 lg:w-[500px] mobile:w-[270px] p-3 min-h-fit max-h-[500px] resize-none outline-none border-2 border-btn_add-700 rounded-lg" placeholder="Content" ></textarea>
 
-              </form>
-              <div className=" flex flex-row w-full justify-end px-5" >
-                <button className="m-2 text-green-900 bg-green-300 w-32 h-10 rounded-xl pointer hover:bg-green-200" onClick={handleAddNote} >Add</button>
-                <button className="m-2 text-red-900 bg-red-300 w-32 h-10 rounded-xl pointer hover:bg-red-200" onClick={() => { document.querySelector(".form-cont-div")?.classList.add("invisible") }} >Cancel</button>
+                </form>
+                <div className=" flex flex-row w-full justify-end px-5" >
+                  <button className="m-2 text-green-900 bg-green-300 w-32 h-10 rounded-xl pointer hover:bg-green-200" onClick={handleAddNote} >Add</button>
+                  <button className="m-2 text-red-900 bg-red-300 w-32 h-10 rounded-xl pointer hover:bg-red-200" onClick={() => { document.querySelector(".form-cont-div")?.classList.add("invisible") }} >Cancel</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        </div>
 
       </div>
       <div className="btn fixed bottom-5 right-5">
-        <button className=" pointer bg-btn_add-500 w-btn_lg h-btn_lg rounded-full text-3xl hover:bg-btn_add-400" onClick={() => {document.querySelector(".form-cont-div")?.classList.remove("invisible")}} >
+        <button className=" pointer bg-btn_add-500 w-btn_lg h-btn_lg rounded-full text-3xl hover:bg-btn_add-400" onClick={() => { document.querySelector(".form-cont-div")?.classList.remove("invisible") }} >
           📃
         </button>
       </div>
