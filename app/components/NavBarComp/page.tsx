@@ -42,9 +42,9 @@ export default function NavBarComp() {
         <h1 className={clsx(" font-bold text-2xl ", title.className)} ><Link href={"/"} className="pointer">Keep Notes</Link></h1>
 
         <div className=" flex gap-0 font-semibold sm:gap-5 mobile:invisible sm:visible ">
-          <button className=" hover:text-header_text/75 pointer" >About</button>
+          <button className=" hover:text-header_text/75 pointer" onClick={()=>{window.location.href="/about"}} >About</button>
           <button><Link className="pointer  hover:text-header_text/75" href={logedIn?"/notes":"/login"} >Notes</Link></button>
-          <button className=" hover:text-header_text/75 pointer" >Account</button>
+          <button className=" hover:text-header_text/75 pointer" onClick={()=>{window.location.href="/account"}} >Account</button>
           <button className="pointer  hover:text-header_text/75" onClick={loginHandler} >{loginTxt}</button>
         </div>
 
@@ -60,9 +60,9 @@ export default function NavBarComp() {
       {/* Mobile nav */}
         <div className="mobile-nav hidden sm:hidden ">
           <div className="flex flex-row justify-center gap-5 p-3 bg-header_text text-white text-sm font-normal ">
-            <button className=" hover:text-white/75 pointer" >About</button>
+            <button className=" hover:text-white/75 pointer" onClick={()=>{window.location.href="/about"}} >About</button>
             <button><Link className="pointer  hover:text-white/75 " href={logedIn?"/notes":"/login"} >Notes</Link></button>
-            <button className=" hover:text-white/75  pointer" >Account</button>
+            <button className=" hover:text-white/75  pointer" onClick={()=>{window.location.href="/account"}} >Account</button>
             <button className="pointer  hover:text-white/75 5" onClick={loginHandler} >{loginTxt}</button>
           </div>
         </div>
