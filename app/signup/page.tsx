@@ -2,9 +2,9 @@
 import clsx from "clsx";
 import NavBarComp from "../components/NavBarComp/page";
 import { Ubuntu } from "next/font/google";
-import PocketBase from 'pocketbase';
+// import PocketBase from 'pocketbase';
 
-const pb = new PocketBase('/');
+// const pb = new PocketBase('/');
 
 const loginTxt = Ubuntu({
   subsets: ['latin'],
@@ -32,13 +32,47 @@ export default function Signup() {
     } else {
       console.log(name, email, password);
 
-      const record = await pb.collection('keep_notes_users').create({
-        username: name,
-        email: email,
-        password: password,
-      });
+      // const record = await pb.collection('keep_notes_users').create({
+      //   username: name,
+      //   email: email,
+      //   password: password,
+      // });
 
-      console.log(record);
+      // console.log(record);
+
+
+      var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Access-Control-Request-Headers", "*");
+        myHeaders.append("api-key", process.env.API_KEY as string);
+        myHeaders.append("Accept", "application/json");
+
+        var raw = JSON.stringify({
+        "dataSource": process.env.DATASOURCE as string,
+        "database": process.env.DATABASE as string,
+        "collection": "users",
+        "document": {
+            username: name,
+            email: email,
+            password: password,
+            notes : [],
+            firstname : "",
+            lastname : "",
+            age: "",
+            ph_no: "",
+            gender: "",
+        }
+        });
+
+        fetch("/v1/action/insertOne", {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+        })
+        .then(response => response.json())
+        .then(result => console.log(result))
+
       window.location.href = "/login";
     }
 
