@@ -8,7 +8,7 @@ export default function Home() {
     <main className=" container-fluid relative">
 
       <NavBarComp />
-      <WelcomePage />
+      <WelcomePage className=" welcome-page lg:pt-[3px]" />
 
     </main>
   )

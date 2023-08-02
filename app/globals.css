@@ -40,4 +40,11 @@
   .text-cursor {
     cursor: url(../public/icons8-line-25.png), text;
   }
+
+  .welcome-page{
+    background: url(../public/welcomepage_bg.png) no-repeat center center fixed;
+    background-size: cover;
+    background-attachment: fixed;
+  }
+
 }
