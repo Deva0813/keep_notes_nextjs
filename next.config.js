@@ -7,15 +7,16 @@ const nextConfig = {
         return [
             {
                 source: '/v1/:path*',
-                destination: 'https://ap-south-1.aws.data.mongodb-api.com/app/data-rapcp/endpoint/data/v1/:path*'
+                destination: process.env.API_URL+'/:path*'
             }
         ]
     },
     env: {
-        API_URL:"https://ap-south-1.aws.data.mongodb-api.com/app/data-rapcp/endpoint/data/v1",
-        API_KEY:"XFDxtZpDKUJGOa15FnKp2CwUskfLUDpGSJ3xYGUu0eCB0wEmzbENwk3cnoEth7PL",
-        DATABASE:"keep_notes_app",
-        DATASOURCE:"Cluster0",
+        //MONGO DB DATA API URL and API KEY
+        API_URL:process.env.API_URL,
+        API_KEY:process.env.API_KEY,
+        DATABASE:process.env.DATABASE,
+        DATASOURCE:process.env.DATASOURCE,
     },
 }
 
