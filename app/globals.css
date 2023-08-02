@@ -30,7 +30,7 @@
   /* custom cursor */
 
   .default {
-    cursor: url(../public/icons8-cursor-32.cur), default;
+    cursor: url(../public/icons8-cursor-32.png), default;
   }
 
   .pointer {

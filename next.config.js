@@ -5,10 +5,6 @@ const nextConfig = {
     },
     rewrites () {
         return [
-            // {
-            //     source: '/api/:path*',
-            //     destination: 'http://127.0.0.1:8090/api/:path*',
-            // },
             {
                 source: '/v1/:path*',
                 destination: 'https://ap-south-1.aws.data.mongodb-api.com/app/data-rapcp/endpoint/data/v1/:path*'
