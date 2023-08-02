@@ -38,13 +38,14 @@ export default function NavBarComp() {
 
   return (
     <header className=' z-20 container-fluid bg-header text-header_text min-h-header sticky top-0'>
+
       <div className="container flex flex-row mobile:mx-0 mobile:px-3 mobile:min-w-full sm:m-auto sm:p-4 sm:min-w-min justify-between mobile: items-center p-4 mx-auto text-lg sm:text-lg mobile:text-sm">
         <h1 className={clsx(" font-bold text-2xl ", title.className)} ><Link href={"/"} className="pointer">Keep Notes</Link></h1>
 
         <div className=" flex gap-0 font-semibold sm:gap-5 mobile:invisible sm:visible ">
           <button className=" hover:text-header_text/75 pointer" onClick={()=>{window.location.href="/about"}} >About</button>
           <button><Link className="pointer  hover:text-header_text/75" href={logedIn?"/notes":"/login"} >Notes</Link></button>
-          <button className=" hover:text-header_text/75 pointer"><Link href={logedIn?"/account":"/login"} >Account</Link></button>
+          <button className=" hover:text-header_text/75 pointer"><Link className="pointer" href={logedIn?"/account":"/login"} >Account</Link></button>
           <button className="pointer  hover:text-header_text/75" onClick={loginHandler} >{loginTxt}</button>
         </div>
 

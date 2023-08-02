@@ -2,10 +2,7 @@
 import clsx from "clsx";
 import NavBarComp from "../components/NavBarComp/page";
 import { Ubuntu } from "next/font/google";
-// import PocketBase from 'pocketbase';
 import { useEffect, useState } from "react";
-
-// const pb = new PocketBase('/');
 
 const loginTxt = Ubuntu({
   subsets: ['latin'],
@@ -34,7 +31,6 @@ export default function Login() {
     console.log(email, password);
 
     try {
-      // const record = await pb.collection('keep_notes_users').getFirstListItem('email="'+email+'" && password="'+password+'"');
 
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
@@ -67,15 +63,6 @@ export default function Login() {
         })
 
       console.log(userdata);
-
-      // if (userdata) {
-      //   window.sessionStorage.setItem('userId', userdata._id);
-      //   window.sessionStorage.setItem('user', JSON.stringify(userdata));
-      //   window.sessionStorage.setItem('logedIn', 'true');
-      //   window.sessionStorage.setItem('email', email);
-      //   window.sessionStorage.setItem('password', password);
-      //   window.location.href = "/notes";
-      // }
 
     } catch (error) {
       console.log(error);

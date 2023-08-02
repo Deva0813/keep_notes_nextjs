@@ -2,20 +2,6 @@
 import { useEffect, useState } from "react";
 import NavBarComp from "../components/NavBarComp/page";
 import { v4 as uuidv4 } from "uuid";
-// import PocketBase from "pocketbase";
-
-// const pb = new PocketBase('/');
-
-// type dataNote = {
-//   collectionId: string,
-//   collectionName: string,
-//   content: string,
-//   created: string,
-//   id: string,
-//   title: string,
-//   updated: string,
-//   user: string,
-// }
 
 export default function NotesPage() {
   const [selectedNote, setSelectedNote] = useState({
@@ -42,26 +28,7 @@ export default function NotesPage() {
     var count = 1;
     function getData() {
       try {
-        // const resultList = await pb.collection('keep_notes_data').getFullList({
-        //   filter: 'user = "' + userId + '"',
-        // });
-        // resultList.forEach((item) => {
-        //   setData((prev) => [
-        //     ...prev,
-        //     {
-        //       collectionId: item.collectionId,
-        //       collectionName: item.collectionName,
-        //       content: item.content,
-        //       created: item.created,
-        //       id: item.id,
-        //       title: item.title,
-        //       updated: item.updated,
-        //       user: item.user,
-        //     },
-        //   ]);
-        // }
-        // );
-
+        
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Access-Control-Request-Headers", "*");
@@ -208,8 +175,6 @@ export default function NotesPage() {
 
     document.querySelector(".form-cont-div")?.classList.add("invisible");
 
-    // const record = await pb.collection('keep_notes_data').create(newNote);
-
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Access-Control-Request-Headers", "*");
@@ -248,6 +213,7 @@ export default function NotesPage() {
       <NavBarComp />
 
       <div className=" relative container min-h-body mx-auto pt-5 flex flex-col items-center">
+        
         <div className=" absolute top-0 left-[-50px] text-sm md:left-0 sub-title-txt p-3 px-4">
           <p className="text-btn_add-600">
             Homepage&nbsp;/&nbsp;
@@ -303,7 +269,7 @@ export default function NotesPage() {
                 {selectedNote.title}
               </span>
               <span
-                className="pr-1 pl-2 text-md pointer opacity-70 hover:opacity-100 "
+                className="pr-1 pl-2 text-md pointer opacity-50 hover:opacity-100 "
                 onClick={() => {
                   document
                     .querySelector(".big-note-cont")
@@ -324,15 +290,15 @@ export default function NotesPage() {
                 ></textarea>
               </div>
             </div>
-            <div className="flex items-center justify-end w-full px-5 pb-4 font-semibold ">
+            <div className="flex items-center justify-end w-full px-5 pb-4 font-medium ">
               <button
-                className="m-2 text-green-900 bg-green-300 w-32 h-10 rounded-xl pointer hover:bg-green-200"
+                className="m-2 text-white bg-green-500 w-32 h-10 rounded-lg pointer hover:bg-green-600"
                 onClick={handleSave}
               >
                 Save
               </button>
               <button
-                className="m-2 text-red-900 bg-red-300 w-32 h-10 rounded-xl pointer hover:bg-red-200"
+                className="m-2 text-white bg-red-500 w-32 h-10 rounded-lg pointer hover:bg-red-600"
                 onClick={handleDelete}
               >
                 Delete
@@ -348,13 +314,13 @@ export default function NotesPage() {
             className="lg:w-[600px] mobile:w-[350px] border-2 border-btn_add-700 max-h-full rounded-xl m-5 overflow-hidden"
             style={{ background: "#F4F2DE" }}
           >
-            <div className=" relative bg-btn_add-300 min-w-full text-end border-b-2 border-btn_add-700 text-lg p-2 pr-3 h-11">
+            <div className=" relative bg-btn_add-300 min-w-full text-end border-b-2 border-btn_add-700 text-lg p-2 pr-3 h-11 " >
               <span className="absolute left-4 top-2 text-btn_add-800 text-start font-semibold lg:w-[400px] mobile:w-[200px] truncate">
                 {" "}
                 Add Notes{" "}
               </span>
               <span
-                className="pr-1 pl-2 text-md pointer opacity-70 hover:opacity-100 "
+                className="pr-1 pl-2 text-md pointer opacity-50 hover:opacity-100 "
                 onClick={() => {
                   document
                     .querySelector(".form-cont-div")
@@ -365,34 +331,34 @@ export default function NotesPage() {
               </span>
             </div>
 
-            <div className="px-1 py-2 flex flex-row items-center justify-center">
+            <div className="px-1 py-2 flex flex-row items-center justify-center  ">
               <div className="p-2 m-3 w-full ">
-                <form className="flex flex-col items-center justify-center">
+                <form className="flex flex-col items-center justify-center ">
                   <label htmlFor=""></label>
                   <input
                     type="text"
                     name="title_in"
                     id="title_in"
-                    className="text-cursor text-btn_add-800 m-3 sm:m-1 lg:w-[500px] mobile:w-[270px] p-3 min-h-fit max-h-[500px] resize-none outline-none border-2 border-btn_add-700 rounded-lg"
+                    className="text-cursor text-btn_add-800 m-3 sm:m-1 w-full p-3 min-h-fit max-h-[500px] resize-none outline-none border-2 border-btn_add-700 rounded-lg"
                     placeholder="Title"
                   />
                   <textarea
                     rows={10}
                     name="content_in"
                     id="content_in"
-                    className="text-cursor text-btn_add-800 m-3 sm:m-1 lg:w-[500px] mobile:w-[270px] p-3 min-h-fit max-h-[500px] resize-none outline-none border-2 border-btn_add-700 rounded-lg"
+                    className="text-cursor md:mt-5 text-btn_add-800 m-3 sm:m-1 w-full p-3 min-h-fit max-h-[500px] resize-none outline-none border-2 border-btn_add-700 rounded-lg"
                     placeholder="Content"
                   ></textarea>
                 </form>
-                <div className=" flex flex-row w-full justify-end px-5">
+                <div className=" flex flex-row w-full justify-end font-medium md:pt-3 ">
                   <button
-                    className="m-2 text-green-900 bg-green-300 w-32 h-10 rounded-xl pointer hover:bg-green-200"
+                    className="m-2 text-white bg-green-500 w-32 h-10 rounded-lg pointer hover:bg-green-600"
                     onClick={handleAddNote}
                   >
                     Add
                   </button>
                   <button
-                    className="m-2 text-red-900 bg-red-300 w-32 h-10 rounded-xl pointer hover:bg-red-200"
+                    className="m-2 text-white bg-red-500 w-32 h-10 rounded-lg pointer hover:bg-red-600"
                     onClick={() => {
                       document
                         .querySelector(".form-cont-div")

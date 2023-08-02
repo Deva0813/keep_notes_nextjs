@@ -2,9 +2,6 @@
 import clsx from "clsx";
 import NavBarComp from "../components/NavBarComp/page";
 import { Ubuntu } from "next/font/google";
-// import PocketBase from 'pocketbase';
-
-// const pb = new PocketBase('/');
 
 const loginTxt = Ubuntu({
   subsets: ['latin'],
@@ -26,20 +23,17 @@ export default function Signup() {
       return;
     }
     
+
+    if(password === "" || confirmPassword === "" || password.length < 8){
+      alert("Password should be atleast 8 characters long");
+      return;
+    }
+
     if (password !== confirmPassword) {
       alert("Passwords don't match");
       return;
     } else {
       console.log(name, email, password);
-
-      // const record = await pb.collection('keep_notes_users').create({
-      //   username: name,
-      //   email: email,
-      //   password: password,
-      // });
-
-      // console.log(record);
-
 
       var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
