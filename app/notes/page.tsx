@@ -3,6 +3,11 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Ubuntu } from "next/font/google";
 import clsx from "clsx";
+
+import { getByFilter } from "../hooks/useGet";
+import { updateOne } from "../hooks/usePut";
+
+
 const titlefont = Ubuntu({
   weight: ["700"],
   subsets: ["greek"],
@@ -23,7 +28,7 @@ export default function NotesPage() {
     updated: "",
   };
 
-  const [user , setUser] = useState("");
+  const [user, setUser] = useState("");
 
   //------------------------------------------------ GET DATA FROM POCKETBASE DB----------------------------------------------------------------
 
@@ -33,21 +38,13 @@ export default function NotesPage() {
   useEffect(() => {
     setData([]);
 
-    const store:any =JSON.parse(sessionStorage.getItem("user") as string );
+    const store: any = JSON.parse(sessionStorage.getItem("user") as string);
     setUser(store.username);
     var count = 1;
     async function getData() {
       try {
-        
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("Access-Control-Request-Headers", "*");
-        myHeaders.append("api-key", process.env.API_KEY as string);
-        myHeaders.append("Accept", "application/json");
 
-        var raw = JSON.stringify({
-          dataSource: process.env.DATASOURCE as string,
-          database: process.env.DATABASE as string,
+        const data = await getByFilter({
           collection: "users",
           filter: {
             _id: { $oid: sessionStorage.getItem("userId") as string },
@@ -57,15 +54,9 @@ export default function NotesPage() {
           },
         });
 
-        await fetch("/v1/action/find", {
-          method: "POST",
-          headers: myHeaders,
-          body: raw,
-          redirect: "follow",
-        })
-          .then((response) => response.json())
-          .then((result) =>{ setData(result.documents[0].notes);});
-      } catch (error) {}
+        setData(data.document.notes);
+
+      } catch (error) { }
     }
 
     if (count == 1) {
@@ -87,75 +78,67 @@ export default function NotesPage() {
     }
   }, [selectedNote]);
 
-  function handleSave() {
+  async function handleSave() {
 
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Request-Headers", "*");
-    myHeaders.append("api-key", process.env.API_KEY as string);
-    myHeaders.append("Accept", "application/json");
-    
-    var raw = JSON.stringify({
-      "dataSource": process.env.DATASOURCE as string,
-      "database": process.env.DATABASE as string,
-      "collection": "users",
-      "filter": {
-        "notes.id": selectedNote.id
-      },
-      "update": {
-        "$set": {
-          "notes.$.content": selectedNote.content,
-          "notes.$.updated": new Date().toUTCString()
-        }
+    try {
+      const data = await updateOne({
+        collection: "users",
+        filter: {
+          "notes.id": selectedNote.id,
+        },
+        update: {
+          $set: {
+            "notes.$.content": selectedNote.content,
+            "notes.$.updated": new Date().toUTCString(),
+          },
+        },
+      });
+      
+      if (data) {
+        setRefresher(true);
       }
-    });
 
-    fetch("/v1/action/updateOne", {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow'
-    })
-      .then(response => response.json())
-      .then(result => {setRefresher(true);})
+    } catch (error) {
+      console.log(error);
+    }
 
     document.querySelector(".big-note-cont")?.classList.add("invisible");
   }
 
-  function handleDelete() {
+  async function handleDelete() {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Access-Control-Request-Headers", "*");
     myHeaders.append("api-key", process.env.API_KEY as string);
     myHeaders.append("Accept", "application/json");
-    
-    var raw = JSON.stringify({
-      "dataSource": process.env.DATASOURCE as string,
-      "database": process.env.DATABASE as string,
-      "collection": "users",
-      "filter": {
-        "notes.id": selectedNote.id
-      },
-      "update": {
-        "$pull": {
-          "notes": {
-            "id": selectedNote.id
-          }
-        }
-      }
-    });
 
-    fetch("/v1/action/updateOne", {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow'
-    })
-      .then(response => response.json())
-      .then(result => {setRefresher(true);})
+    try {
+      
+      const res = await updateOne({
+        collection: "users",
+        filter: {
+          "notes.id": selectedNote.id,
+        },
+        update: {
+          $pull: {
+            notes: {
+              id: selectedNote.id,
+            },
+          },
+        },
+      });
+
+      if (res) {
+        setRefresher(true);
+      }
+      
+    } catch (error) {
+      
+    }
+      
 
     document.querySelector(".big-note-cont")?.classList.add("invisible");
-    
+
 
   }
 
@@ -167,7 +150,7 @@ export default function NotesPage() {
     });
   }
 
-  function handleAddNote() {
+  async function handleAddNote() {
     const form = document.querySelector("form") as HTMLFormElement;
     const formdata = new FormData(form);
 
@@ -185,51 +168,38 @@ export default function NotesPage() {
 
     document.querySelector(".form-cont-div")?.classList.add("invisible");
 
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Request-Headers", "*");
-    myHeaders.append("api-key", process.env.API_KEY as string);
-    myHeaders.append("Accept", "application/json");
-
-    var raw = JSON.stringify({
-      dataSource: process.env.DATASOURCE as string,
-      database: process.env.DATABASE as string,
-      collection: "users",
-      //filter
-      filter: {
-        _id: { $oid: sessionStorage.getItem("userId") as string },
-      },
-      //update
-      update: {
-        $push: {
-          notes: newNote,
+    try {
+      const data = await updateOne({
+        collection: "users",
+        filter: {
+          _id: { $oid: sessionStorage.getItem("userId") as string },
         },
-      },
-    });
+        update: {
+          $push: {
+            notes: newNote,
+          },
+        },
+      });
 
-    fetch("/v1/action/updateOne", {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    })
-      .then((response) => response.json())
-      .then((result) => {setRefresher(true);});
+      if (data) {
+        setRefresher(true);
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
 
   }
 
   const wecomeGreetings = () => {
     var date = new Date();
     var hours = date.getHours();
-
-    
-
     if (hours >= 0 && hours < 12) {
-      return "Good Morning "+user+"!";
+      return "Good Morning " + user + "!";
     } else if (hours >= 12 && hours < 17) {
-      return "Good Afternoon "+user+"!";
+      return "Good Afternoon " + user + "!";
     } else {
-      return "Good Evening "+user+"!";
+      return "Good Evening " + user + "!";
     }
   };
 
@@ -238,7 +208,7 @@ export default function NotesPage() {
   return (
     <div className="relative">
       <div className=" relative container min-h-body mx-auto pt-5 flex flex-col items-center">
-        
+
         <div className=" absolute top-0 left-[-50px] text-sm md:left-0 sub-title-txt p-3 px-4">
           <p className="text-btn_add-600">
             Homepage&nbsp;/&nbsp;
@@ -248,15 +218,14 @@ export default function NotesPage() {
           </p>
 
         </div>
-        
-        <div className="container-fluid md:px-4 md:pt-11 w-full">
-        <h1 className={clsx(" text-2xl md:text-5xl text-btn_add-800 pt-7 md:p-5 ", titlefont.className)}>
-        {wecomeGreetings()}
-        </h1>
-        </div>
 
+        <div className="container-fluid md:px-4 md:pt-11 w-full">
+          <h1 className={clsx(" text-2xl md:text-5xl text-btn_add-800 pt-7 md:p-5 ", titlefont.className)}>
+            {wecomeGreetings()}
+          </h1>
+        </div>
         <div className="grid grid-cols-1 w-full mobile:relative sm:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4">
-        
+
           {data.map((item: any) => (
             <button
               key={item.id}

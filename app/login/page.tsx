@@ -2,6 +2,7 @@
 import clsx from "clsx";
 import { Ubuntu } from "next/font/google";
 import { useEffect, useState } from "react";
+import { getByFilter } from "../hooks/useGet";
 
 const loginTxt = Ubuntu({
   subsets: ['latin'],
@@ -24,44 +25,28 @@ export default function Login() {
     console.log(userdata);
   }, [userdata]);
 
-  function login() {
+  async function login() {
     const email = (document.getElementById("email") as HTMLInputElement).value;
     const password = (document.getElementById("password") as HTMLInputElement).value;
     console.log(email, password);
 
     try {
 
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Request-Headers", "*");
-      myHeaders.append("api-key", process.env.API_KEY as string);
-      myHeaders.append("Accept", "application/json");
-      var raw = JSON.stringify({
-        "dataSource": process.env.DATASOURCE as string,
-        "database": process.env.DATABASE as string,
-        "collection": "users",
-        "filter": {
-          "email": email,
-          "password": password
+      //login check
+      const data = await getByFilter({
+        collection: "users",
+        filter: {
+          email: email,
+          password: password
         }
       });
 
-      fetch("/v1/action/findOne", {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow'
-      })
-        .then(response => response.json())
-        .then(result => {
-          if(result.document !== null){
-            setUserData(result.document);
-          }else{
-            alert("Invalid email or password");
-          }
-        })
-
-      console.log(userdata);
+      if (data.document !== null) {
+        setUserData(data.document);
+      }
+      else {
+        alert("Invalid email or password");
+      }
 
     } catch (error) {
       console.log(error);

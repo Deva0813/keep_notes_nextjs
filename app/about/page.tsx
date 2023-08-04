@@ -17,7 +17,7 @@ import mongodb from "../../public/MongoDB_Logo.png"
 import node from "../../public/node.png"
 
 import { useState } from "react";
-import useInsertOne from "../hooks/usePost";
+import insertOne from "../hooks/usePost";
 
 const titlefont = Ubuntu({
     weight: ["700"],
@@ -26,6 +26,8 @@ const titlefont = Ubuntu({
 
 
 export default function AboutPage() {
+
+
 
     //useState messageData
     const [messageData, setMessageData] = useState({
@@ -38,7 +40,6 @@ export default function AboutPage() {
     });
     
     //update messageData
-
     const updateMessageData = (e: any) => {
         setMessageData(
             (prev) => ({
@@ -52,9 +53,15 @@ export default function AboutPage() {
     };
 
     //useInsertOne
-    
-    const postMessage = ()=>{
-        console.log(messageData);
+    const postMessage = async ()=>{
+
+        try {
+            await insertOne(messageData)
+            alert("Message Sent Successfully")
+        } catch (error) {
+            console.log(error)
+        }
+        
     }
 
     return (

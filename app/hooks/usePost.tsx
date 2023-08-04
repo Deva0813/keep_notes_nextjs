@@ -1,5 +1,3 @@
-import { useMutation, useQueryClient } from 'react-query';
-
 async function insertOne(data:any) {
   const response = await fetch("/v1/action/insertOne", {
     method: 'POST',
@@ -25,21 +23,4 @@ async function insertOne(data:any) {
   return response.json();
 }
 
-function useInsertOne() {
-  const queryClient = useQueryClient();
-
-  return useMutation(( data:any) => insertOne(data), {
-    onSuccess: () => {
-      // Invalidate and refetch data after successful mutation
-      queryClient.invalidateQueries('users');
-    },
-
-    onError: () => {
-      // Invalidate and refetch data after error mutation
-      queryClient.invalidateQueries('users');
-    }
-
-  });
-}
-
-export default useInsertOne;
+export default insertOne;

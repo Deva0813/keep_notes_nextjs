@@ -1,5 +1,4 @@
 import WelcomePage from "./components/WelcomePage/page";
-
 export default function Home() {
 
   return (

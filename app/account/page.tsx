@@ -3,6 +3,10 @@ import clsx from "clsx";
 import { Ubuntu } from "next/font/google";
 import { useState, useEffect } from "react";
 
+import { updateOne } from "../hooks/usePut";
+import { getByFilter } from "../hooks/useGet";
+import { deleteOne } from "../hooks/useDelete";
+
 const titlefont = Ubuntu({
     weight: ["700"],
     subsets: ["greek"],
@@ -94,66 +98,51 @@ export default function Account() {
 
     useEffect(() => {
 
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("Access-Control-Request-Headers", "*");
-        myHeaders.append("api-key", process.env.API_KEY as string);
-        myHeaders.append("Accept", "application/json");
+        async function getAccInfo() {
+            const res = await getByFilter(
+                {
+                    collection: "users",
+                    filter: {
+                        _id: { "$oid": sessionStorage.getItem('userId') as string }
+                    }
+                }
+            )
 
-        var raw = JSON.stringify({
-            "dataSource": process.env.DATASOURCE as string,
-            "database": process.env.DATABASE as string,
-            "collection": "users",
-            "filter": {
-                _id: { "$oid": sessionStorage.getItem('userId') as string }
-            }
-        });
+            setAccInfo(res.document);
+        }
 
-        fetch("/v1/action/findOne", {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        })
-            .then(response => response.json())
-            .then(result => setAccInfo(result.document))
+        getAccInfo();
 
     }, []);
 
-    function updateAccInfo() {
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("Access-Control-Request-Headers", "*");
-        myHeaders.append("api-key", process.env.API_KEY as string);
-        myHeaders.append("Accept", "application/json");
+    async function updateAccInfo() {
+        try {
 
-        var raw = JSON.stringify({
-            "dataSource": process.env.DATASOURCE as string,
-            "database": process.env.DATABASE as string,
-            "collection": "users",
-            "filter": {
-                _id: { "$oid": sessionStorage.getItem('userId') as string }
-            },
-            "update": {
-                "$set": {
-                    age: accInfo.age,
-                    firstname: accInfo.firstname,
-                    lastname: accInfo.lastname,
-                    ph_no: accInfo.ph_no,
-                    username: accInfo.username,
-                    gender: accInfo.gender,
-                }
+            const res = await updateOne(
+                {
+                    collection: "users",
+                    filter: {
+                        _id: { "$oid": sessionStorage.getItem('userId') as string }
+                    },
+                    update: {
+                        "$set": {
+                            age: accInfo.age,
+                            firstname: accInfo.firstname,
+                            lastname: accInfo.lastname,
+                            ph_no: accInfo.ph_no,
+                            username: accInfo.username,
+                            gender: accInfo.gender,
+                        }
+                    }
+                });
+
+            if (res) {
+                alert("Account Info Updated Successfully!");
             }
-        });
 
-        fetch("/v1/action/updateOne", {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        })
-            .then(response => response.json())
-            .then(result => alert("Account Info Updated Successfully!"))
+        } catch (error) {
+            console.log(error);
+        }
 
         setAccInfoModalVisible("invisible");
     }
@@ -165,76 +154,58 @@ export default function Account() {
         return re.test(email);
     }
 
-    function updateEmailInfo() {
+    async function updateEmailInfo() {
         if (validateEmail()) {
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
-            myHeaders.append("Access-Control-Request-Headers", "*");
-            myHeaders.append("api-key", process.env.API_KEY as string);
-            myHeaders.append("Accept", "application/json");
 
-            var raw = JSON.stringify({
-                "dataSource": process.env.DATASOURCE as string,
-                "database": process.env.DATABASE as string,
-                "collection": "users",
-                "filter": {
-                    _id: { "$oid": sessionStorage.getItem('userId') as string }
-                },
-                "update": {
-                    "$set": {
-                        email: accInfo.email,
+            const res = await updateOne(
+                {
+                    collection: "users",
+                    filter: {
+                        _id: { "$oid": sessionStorage.getItem('userId') as string }
+                    },
+                    update: {
+                        "$set": {
+                            email: accInfo.email,
+                        }
                     }
-                }
-            });
+                });
+            
+            if (res) {
+                alert("Email Updated Successfully!");
+            }
 
-            fetch("/v1/action/updateOne", {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow'
-            })
-                .then(response => response.json())
-                .then(result => alert("Email Updated Successfully!"))
             setEmailModalVisible("invisible");
         } else {
             alert("Please enter a valid email address");
         }
     }
 
-    function updatePasswordInfo() {
+    async function updatePasswordInfo() {
         if (oldpassword == accInfo.password && newpassword.length >= 8) {
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
-            myHeaders.append("Access-Control-Request-Headers", "*");
-            myHeaders.append("api-key", process.env.API_KEY as string);
-            myHeaders.append("Accept", "application/json");
 
-            var raw = JSON.stringify({
-                "dataSource": process.env.DATASOURCE as string,
-                "database": process.env.DATABASE as string,
-                "collection": "users",
-                "filter": {
-                    _id: { "$oid": sessionStorage.getItem('userId') as string }
-                },
-                "update": {
-                    "$set": {
-                        password: newpassword,
+            const res = await updateOne(
+                {
+                    collection: "users",
+                    filter: {
+                        _id: { "$oid": sessionStorage.getItem('userId') as string }
+                    },
+                    update: {
+                        "$set": {
+                            password: newpassword,
+                        }
                     }
-                }
-            });
+                });
 
-            fetch("/v1/action/updateOne", {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow'
-            })
-                .then(response => response.json())
-                .then(result => alert("Password Updated Successfully!"))
+            if (res) {
+                alert("Password Updated Successfully!");
+                setOldPassword("");
+                setNewPassword("");
+            }
+
             setChangePassModalVisible("invisible");
         }
         else {
-           if (newpassword.length < 8) {
+            if (newpassword.length < 8) {
                 alert("Password must be atleast 8 characters long");
             }
             else {
@@ -243,35 +214,21 @@ export default function Account() {
         }
     }
 
-    function deleteAccount() {
+    async function deleteAccount() {
 
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("Access-Control-Request-Headers", "*");
-        myHeaders.append("api-key", process.env.API_KEY as string);
-        myHeaders.append("Accept", "application/json");
+        const res = await deleteOne(
+            {
+                collection: "users",
+                filter: {
+                    _id: { "$oid": sessionStorage.getItem('userId') as string }
+                }
+            });
 
-        var raw = JSON.stringify({
-            "dataSource": process.env.DATASOURCE as string,
-            "database": process.env.DATABASE as string,
-            "collection": "users",
-            "filter": {
-                _id: { "$oid": sessionStorage.getItem('userId') as string }
-            },
-        });
-
-        fetch("/v1/action/deleteOne", {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        })
-            .then(response => response.json())
-            .then(result => {
-                alert("Account Deleted Successfully!");
-                window.location.href = "/";
-                window.sessionStorage.clear();
-            })
+        if (res) {
+            alert("Account Deleted Successfully!");
+            window.location.href = "/";
+            window.sessionStorage.clear();
+        }
 
         setDeleteAccModalVisible("invisible");
 
