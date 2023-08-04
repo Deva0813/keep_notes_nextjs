@@ -27,6 +27,10 @@
     scroll-behavior: smooth;
   }
 
+  body{
+    scroll-behavior: smooth;
+  }
+
   /* custom cursor */
 
   .default {

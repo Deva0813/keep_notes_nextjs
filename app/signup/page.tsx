@@ -1,6 +1,5 @@
 'use client';
 import clsx from "clsx";
-import NavBarComp from "../components/NavBarComp/page";
 import { Ubuntu } from "next/font/google";
 
 const loginTxt = Ubuntu({
@@ -79,7 +78,6 @@ export default function Signup() {
 
   return (
     <div>
-      <NavBarComp />
       <div className=" relative container mx-auto min-h-body flex flex-col items-center justify-center ">
       <div className=" absolute top-0 left-[-50px] text-sm md:left-0 sub-title-txt p-3 px-4">
           <p className="text-btn_add-600" >Homepage&nbsp;/&nbsp;<span className=" text-btn_add-700 font-semibold " >Signup Page</span> </p>

@@ -1,7 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
-import NavBarComp from "../components/NavBarComp/page";
 import { v4 as uuidv4 } from "uuid";
+import { Ubuntu } from "next/font/google";
+import clsx from "clsx";
+const titlefont = Ubuntu({
+  weight: ["700"],
+  subsets: ["greek"],
+});
+
 
 export default function NotesPage() {
   const [selectedNote, setSelectedNote] = useState({
@@ -17,6 +23,8 @@ export default function NotesPage() {
     updated: "",
   };
 
+  const [user , setUser] = useState("");
+
   //------------------------------------------------ GET DATA FROM POCKETBASE DB----------------------------------------------------------------
 
   const [data, setData] = useState([] as any);
@@ -25,8 +33,10 @@ export default function NotesPage() {
   useEffect(() => {
     setData([]);
 
+    const store:any =JSON.parse(sessionStorage.getItem("user") as string );
+    setUser(store.username);
     var count = 1;
-    function getData() {
+    async function getData() {
       try {
         
         var myHeaders = new Headers();
@@ -47,14 +57,14 @@ export default function NotesPage() {
           },
         });
 
-        fetch("/v1/action/find", {
+        await fetch("/v1/action/find", {
           method: "POST",
           headers: myHeaders,
           body: raw,
           redirect: "follow",
         })
           .then((response) => response.json())
-          .then((result) => setData(result.documents[0].notes));
+          .then((result) =>{ setData(result.documents[0].notes);});
       } catch (error) {}
     }
 
@@ -185,9 +195,11 @@ export default function NotesPage() {
       dataSource: process.env.DATASOURCE as string,
       database: process.env.DATABASE as string,
       collection: "users",
+      //filter
       filter: {
         _id: { $oid: sessionStorage.getItem("userId") as string },
       },
+      //update
       update: {
         $push: {
           notes: newNote,
@@ -206,12 +218,25 @@ export default function NotesPage() {
 
   }
 
+  const wecomeGreetings = () => {
+    var date = new Date();
+    var hours = date.getHours();
+
+    
+
+    if (hours >= 0 && hours < 12) {
+      return "Good Morning "+user+"!";
+    } else if (hours >= 12 && hours < 17) {
+      return "Good Afternoon "+user+"!";
+    } else {
+      return "Good Evening "+user+"!";
+    }
+  };
+
   //------------------------------------------------------END---------------------------------------------------------
 
   return (
     <div className="relative">
-      <NavBarComp />
-
       <div className=" relative container min-h-body mx-auto pt-5 flex flex-col items-center">
         
         <div className=" absolute top-0 left-[-50px] text-sm md:left-0 sub-title-txt p-3 px-4">
@@ -221,12 +246,21 @@ export default function NotesPage() {
               Your Notes
             </span>{" "}
           </p>
+
         </div>
-        <div className="grid grid-cols-1  pt-5 w-full mobile:relative tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4">
+        
+        <div className="container-fluid md:px-4 md:pt-11 w-full">
+        <h1 className={clsx(" text-2xl md:text-5xl text-btn_add-800 pt-7 md:p-5 ", titlefont.className)}>
+        {wecomeGreetings()}
+        </h1>
+        </div>
+
+        <div className="grid grid-cols-1 w-full mobile:relative sm:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4">
+        
           {data.map((item: any) => (
             <button
               key={item.id}
-              className="w-80 left-[-20px] md:left-[0px] laptop:left-5 pointer relative border-2 border-btn_add-700 h-56 rounded-lg m-5 mobile:m-3 overflow-hidden drop-shadow-md hover:drop-shadow-2xl transition-all delay-50 hover:top-1 ease-linear shadow-btn_add-600  "
+              className="w-80 left-[-20px] md:left-[0px] laptop:left-5 pointer relative border-2 border-btn_add-700 h-56 rounded-lg m-3 md:m-3 overflow-hidden drop-shadow-md hover:drop-shadow-2xl transition-all delay-50 hover:top-1 ease-linear shadow-btn_add-600  "
               style={{ background: "#fff" }}
               onClick={() => {
                 setSelectedNote({
@@ -308,7 +342,7 @@ export default function NotesPage() {
         </div>
       </div>
 
-      <div className=" form-cont-div absolute top-[3px] left-0 w-full h-full flex flex-col items-center justify-center bg-black/50 invisible drop-shadow-2xl shadow-black  ">
+      <div className=" form-cont-div fixed top-[3px] left-0 w-full h-full flex flex-col items-center justify-center bg-black/50 invisible ">
         <div className="h-screen flex items-center">
           <div
             className="lg:w-[600px] mobile:w-[350px] border-2 border-btn_add-700 max-h-full rounded-xl m-5 overflow-hidden"

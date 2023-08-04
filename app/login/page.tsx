@@ -1,6 +1,5 @@
 'use client';
 import clsx from "clsx";
-import NavBarComp from "../components/NavBarComp/page";
 import { Ubuntu } from "next/font/google";
 import { useEffect, useState } from "react";
 
@@ -72,7 +71,6 @@ export default function Login() {
 
   return (
     <div>
-      <NavBarComp />
       <div className=" relative container mx-auto min-h-body flex flex-col items-center justify-center ">
         <div className=" absolute top-0 left-[-50px] text-sm md:left-0 sub-title-txt p-3 px-4">
           <p className="text-btn_add-600" >Homepage&nbsp;/&nbsp;<span className="font-semibold text-btn_add-700 " >Login Page</span> </p>

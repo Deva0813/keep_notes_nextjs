@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 
 const title = Ubuntu({
-  weight: ["500"],
+  weight: ["500","300","400","700"],
   subsets: ['latin']
 })
 
@@ -43,7 +43,7 @@ export default function NavBarComp() {
         <h1 className={clsx(" font-bold text-2xl ", title.className)} ><Link href={"/"} className="pointer">Keep Notes</Link></h1>
 
         <div className=" flex gap-0 font-semibold sm:gap-5 mobile:invisible sm:visible ">
-          <button className=" hover:text-header_text/75 pointer" onClick={()=>{window.location.href="/about"}} >About</button>
+          <button className=" hover:text-header_text/75 pointer" > <Link className="pointer" href={"/about"} >About</Link></button>
           <button><Link className="pointer  hover:text-header_text/75" href={logedIn?"/notes":"/login"} >Notes</Link></button>
           <button className=" hover:text-header_text/75 pointer"><Link className="pointer" href={logedIn?"/account":"/login"} >Account</Link></button>
           <button className="pointer  hover:text-header_text/75" onClick={loginHandler} >{loginTxt}</button>

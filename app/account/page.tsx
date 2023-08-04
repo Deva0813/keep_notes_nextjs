@@ -1,6 +1,5 @@
 "use client";
 import clsx from "clsx";
-import NavBarComp from "../components/NavBarComp/page";
 import { Ubuntu } from "next/font/google";
 import { useState, useEffect } from "react";
 
@@ -166,8 +165,6 @@ export default function Account() {
         return re.test(email);
     }
 
-
-
     function updateEmailInfo() {
         if (validateEmail()) {
             var myHeaders = new Headers();
@@ -282,8 +279,6 @@ export default function Account() {
 
     return (
         <div className="account_page">
-            <NavBarComp />
-
             {/* MODAL ELEMENTS */}
             <div className={clsx("fixed min-w-full h-screen flex md:items-center justify-center z-20 bg-black/50 ", accInfoModalVisible)} >
                 <div className="w-fit h-fit bg-white rounded-xl mt-5 md:mt-0 scale-90 md:scale-100 ">
@@ -291,7 +286,7 @@ export default function Account() {
                     <p className="p-3 px-5 text-sm text-slate-600 ">Are you sure you want to save your profile changes?</p>
                     <div className="flex justify-end p-5 ">
                         <button className="p-2 px-4 mr-2 bg-green-500 text-white hover:bg-green-600 rounded-lg pointer" onClick={updateAccInfo} >Save</button>
-                        <button className="p-2 px-4 bg-blue-500 text-white hover:bg-blue-600 rounded-lg pointer" onClick={() => { setAccInfoModalVisible("invisible") }} >Cancel</button>
+                        <button className="p-2 px-4 bg-slate-500 text-white hover:bg-slate-600 rounded-lg pointer" onClick={() => { setAccInfoModalVisible("invisible") }} >Cancel</button>
                     </div>
                 </div>
             </div>
@@ -313,7 +308,7 @@ export default function Account() {
                     <p className="p-3 px-5 text-sm text-slate-600 ">Are you sure you want to change your account password ?</p>
                     <div className="flex justify-end p-5 ">
                         <button className="p-2 px-4 mr-2 bg-green-500 hover:bg-green-600 text-white rounded-lg pointer" onClick={updatePasswordInfo} >Confirm</button>
-                        <button className="p-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg pointer" onClick={() => { setChangePassModalVisible("invisible") }} >Cancel</button>
+                        <button className="p-2 px-4 bg-slate-500 hover:bg-slate-600 text-white rounded-lg pointer" onClick={() => { setChangePassModalVisible("invisible") }} >Cancel</button>
                     </div>
                 </div>
             </div>

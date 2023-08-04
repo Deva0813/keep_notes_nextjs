@@ -37,8 +37,8 @@ module.exports = {
       screens: {
         'mobile': '300px',
         'tablet': '640px',
-        'laptop': '1024px',
-        'desktop': '1280px',
+        'laptop': '1280px',
+        'desktop': '1400px',
       },
       height: {
         btn_lg: '4rem',
