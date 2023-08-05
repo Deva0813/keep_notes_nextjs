@@ -6,6 +6,7 @@ import clsx from "clsx";
 
 import { getByFilter } from "../hooks/useGet";
 import { updateOne } from "../hooks/usePut";
+import { get } from "http";
 
 
 const titlefont = Ubuntu({
@@ -44,17 +45,19 @@ export default function NotesPage() {
     async function getData() {
       try {
 
-        const data = await getByFilter({
-          collection: "users",
-          filter: {
-            _id: { $oid: sessionStorage.getItem("userId") as string },
-          },
-          projection: {
-            notes: 1,
-          },
-        });
+        // const data = await getByFilter({
+        //   collection: "users",
+        //   filter: {
+        //     _id: { $oid: sessionStorage.getItem("userId") as string },
+        //   },
+        //   projection: {
+        //     notes: 1,
+        //   },
+        // });
 
-        setData(data.document.notes);
+        const db_data = JSON.parse(localStorage.getItem("db_data") as string);
+        const data = db_data.filter((user: any) => user._id === sessionStorage.getItem("userId") );
+        setData(data[0].notes);
 
       } catch (error) { }
     }
@@ -64,6 +67,7 @@ export default function NotesPage() {
       setRefresher(false);
       count--;
     }
+
   }, [refresher]);
 
   //----------------------------------------------------CRUD FUNCTIONS------------------------------------------------------------
@@ -81,20 +85,29 @@ export default function NotesPage() {
   async function handleSave() {
 
     try {
-      const data = await updateOne({
-        collection: "users",
-        filter: {
-          "notes.id": selectedNote.id,
-        },
-        update: {
-          $set: {
-            "notes.$.content": selectedNote.content,
-            "notes.$.updated": new Date().toUTCString(),
-          },
-        },
-      });
-      
-      if (data) {
+      // const data = await updateOne({
+      //   collection: "users",
+      //   filter: {
+      //     "notes.id": selectedNote.id,
+      //   },
+      //   update: {
+      //     $set: {
+      //       "notes.$.content": selectedNote.content,
+      //       "notes.$.updated": new Date().toUTCString(),
+      //     },
+      //   },
+      // });
+
+      const db_data = JSON.parse(localStorage.getItem("db_data") as string);
+      const user = db_data.filter((user: any) => user._id === sessionStorage.getItem("userId") );
+      const notes = user[0].notes;
+      const note = notes.filter((note: any) => note.id === selectedNote.id);
+      note[0].content = selectedNote.content;
+      note[0].updated = new Date().toUTCString();
+
+      localStorage.setItem("db_data", JSON.stringify(db_data));
+
+      if (user) {
         setRefresher(true);
       }
 
@@ -114,21 +127,30 @@ export default function NotesPage() {
 
     try {
       
-      const res = await updateOne({
-        collection: "users",
-        filter: {
-          "notes.id": selectedNote.id,
-        },
-        update: {
-          $pull: {
-            notes: {
-              id: selectedNote.id,
-            },
-          },
-        },
-      });
+      // const res = await updateOne({
+      //   collection: "users",
+      //   filter: {
+      //     "notes.id": selectedNote.id,
+      //   },
+      //   update: {
+      //     $pull: {
+      //       notes: {
+      //         id: selectedNote.id,
+      //       },
+      //     },
+      //   },
+      // });
 
-      if (res) {
+      const db_data = JSON.parse(localStorage.getItem("db_data") as string);
+      const user = db_data.filter((user: any) => user._id === sessionStorage.getItem("userId") );
+      const notes = user[0].notes;
+      const note = notes.filter((note: any) => note.id === selectedNote.id);
+      const index = notes.indexOf(note[0]);
+      notes.splice(index, 1);
+
+      localStorage.setItem("db_data", JSON.stringify(db_data));
+
+      if (user) {
         setRefresher(true);
       }
       
@@ -169,17 +191,22 @@ export default function NotesPage() {
     document.querySelector(".form-cont-div")?.classList.add("invisible");
 
     try {
-      const data = await updateOne({
-        collection: "users",
-        filter: {
-          _id: { $oid: sessionStorage.getItem("userId") as string },
-        },
-        update: {
-          $push: {
-            notes: newNote,
-          },
-        },
-      });
+      // const data = await updateOne({
+      //   collection: "users",
+      //   filter: {
+      //     _id: { $oid: sessionStorage.getItem("userId") as string },
+      //   },
+      //   update: {
+      //     $push: {
+      //       notes: newNote,
+      //     },
+      //   },
+      // });
+
+      const db_data = JSON.parse(localStorage.getItem("db_data") as string);
+      const data = db_data.filter((user: any) => user._id === sessionStorage.getItem("userId") );
+      data[0].notes.push(newNote);
+      localStorage.setItem("db_data", JSON.stringify(db_data));
 
       if (data) {
         setRefresher(true);

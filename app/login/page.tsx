@@ -33,19 +33,32 @@ export default function Login() {
     try {
 
       //login check
-      const data = await getByFilter({
-        collection: "users",
-        filter: {
-          email: email,
-          password: password
-        }
-      });
+      // const data = await getByFilter({
+      //   collection: "users",
+      //   filter: {
+      //     email: email,
+      //     password: password
+      //   }
+      // });
 
-      if (data.document !== null) {
-        setUserData(data.document);
-      }
-      else {
-        alert("Invalid email or password");
+      // if (data.document !== null) {
+      //   setUserData(data.document);
+      // }
+      // else {
+      //   alert("Invalid email or password");
+      // }
+
+      const db_data = localStorage.getItem("db_data");
+
+      if (db_data !== null) {
+        const data = JSON.parse(db_data);
+        const user = data.filter((user: any) => user.email === email && user.password === password);
+        if (user.length === 1) {
+          setUserData(user[0]);
+        }
+        else {
+          alert("Invalid email or password");
+        }
       }
 
     } catch (error) {

@@ -99,16 +99,21 @@ export default function Account() {
     useEffect(() => {
 
         async function getAccInfo() {
-            const res = await getByFilter(
-                {
-                    collection: "users",
-                    filter: {
-                        _id: { "$oid": sessionStorage.getItem('userId') as string }
-                    }
-                }
-            )
+            // const res = await getByFilter(
+            //     {
+            //         collection: "users",
+            //         filter: {
+            //             _id: { "$oid": sessionStorage.getItem('userId') as string }
+            //         }
+            //     }
+            // )
 
-            setAccInfo(res.document);
+            // setAccInfo(res.document);
+
+            const db_data = JSON.parse(localStorage.getItem('db_data') as string);
+            const user = db_data.find((user: any) => user._id == sessionStorage.getItem('userId'));
+
+            setAccInfo(user);
         }
 
         getAccInfo();
@@ -118,25 +123,38 @@ export default function Account() {
     async function updateAccInfo() {
         try {
 
-            const res = await updateOne(
-                {
-                    collection: "users",
-                    filter: {
-                        _id: { "$oid": sessionStorage.getItem('userId') as string }
-                    },
-                    update: {
-                        "$set": {
-                            age: accInfo.age,
-                            firstname: accInfo.firstname,
-                            lastname: accInfo.lastname,
-                            ph_no: accInfo.ph_no,
-                            username: accInfo.username,
-                            gender: accInfo.gender,
-                        }
-                    }
-                });
+            // const res = await updateOne(
+            //     {
+            //         collection: "users",
+            //         filter: {
+            //             _id: { "$oid": sessionStorage.getItem('userId') as string }
+            //         },
+            //         update: {
+            //             "$set": {
+            //                 age: accInfo.age,
+            //                 firstname: accInfo.firstname,
+            //                 lastname: accInfo.lastname,
+            //                 ph_no: accInfo.ph_no,
+            //                 username: accInfo.username,
+            //                 gender: accInfo.gender,
+            //             }
+            //         }
+            //     });
 
-            if (res) {
+            const db_data = JSON.parse(localStorage.getItem('db_data') as string);
+
+            const user = db_data.find((user: any) => user._id == sessionStorage.getItem('userId'));
+
+            user.age = accInfo.age;
+            user.firstname = accInfo.firstname;
+            user.lastname = accInfo.lastname;
+            user.ph_no = accInfo.ph_no;
+            user.username = accInfo.username;
+            user.gender = accInfo.gender;
+
+            localStorage.setItem('db_data', JSON.stringify(db_data));
+
+            if (user) {
                 alert("Account Info Updated Successfully!");
             }
 
@@ -157,18 +175,25 @@ export default function Account() {
     async function updateEmailInfo() {
         if (validateEmail()) {
 
-            const res = await updateOne(
-                {
-                    collection: "users",
-                    filter: {
-                        _id: { "$oid": sessionStorage.getItem('userId') as string }
-                    },
-                    update: {
-                        "$set": {
-                            email: accInfo.email,
-                        }
-                    }
-                });
+            // const res = await updateOne(
+            //     {
+            //         collection: "users",
+            //         filter: {
+            //             _id: { "$oid": sessionStorage.getItem('userId') as string }
+            //         },
+            //         update: {
+            //             "$set": {
+            //                 email: accInfo.email,
+            //             }
+            //         }
+            //     });
+
+            const db_data = JSON.parse(localStorage.getItem('db_data') as string);
+            const res = db_data.find((user: any) => user._id == sessionStorage.getItem('userId'));
+
+            res.email = accInfo.email;
+
+            localStorage.setItem('db_data', JSON.stringify(db_data));
             
             if (res) {
                 alert("Email Updated Successfully!");
@@ -183,18 +208,25 @@ export default function Account() {
     async function updatePasswordInfo() {
         if (oldpassword == accInfo.password && newpassword.length >= 8) {
 
-            const res = await updateOne(
-                {
-                    collection: "users",
-                    filter: {
-                        _id: { "$oid": sessionStorage.getItem('userId') as string }
-                    },
-                    update: {
-                        "$set": {
-                            password: newpassword,
-                        }
-                    }
-                });
+            // const res = await updateOne(
+            //     {
+            //         collection: "users",
+            //         filter: {
+            //             _id: { "$oid": sessionStorage.getItem('userId') as string }
+            //         },
+            //         update: {
+            //             "$set": {
+            //                 password: newpassword,
+            //             }
+            //         }
+            //     });
+
+            const db_data = JSON.parse(localStorage.getItem('db_data') as string);
+            const res = db_data.find((user: any) => user._id == sessionStorage.getItem('userId'));
+
+            res.password = newpassword;
+
+            localStorage.setItem('db_data', JSON.stringify(db_data));
 
             if (res) {
                 alert("Password Updated Successfully!");
@@ -216,15 +248,22 @@ export default function Account() {
 
     async function deleteAccount() {
 
-        const res = await deleteOne(
-            {
-                collection: "users",
-                filter: {
-                    _id: { "$oid": sessionStorage.getItem('userId') as string }
-                }
-            });
+        // const res = await deleteOne(
+        //     {
+        //         collection: "users",
+        //         filter: {
+        //             _id: { "$oid": sessionStorage.getItem('userId') as string }
+        //         }
+        //     });
 
-        if (res) {
+        const db_data = JSON.parse(localStorage.getItem('db_data') as string);
+        
+        db_data.splice(db_data.findIndex((user: any) => user._id == sessionStorage.getItem('userId')), 1);
+
+        localStorage.setItem('db_data', JSON.stringify(db_data));
+
+
+        if (db_data) {
             alert("Account Deleted Successfully!");
             window.location.href = "/";
             window.sessionStorage.clear();

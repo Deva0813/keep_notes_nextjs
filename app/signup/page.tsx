@@ -2,6 +2,7 @@
 import clsx from "clsx";
 import { Ubuntu } from "next/font/google";
 import insertOne from "../hooks/usePost";
+import { v4 as uuidv4 } from "uuid";
 
 const loginTxt = Ubuntu({
   subsets: ['latin'],
@@ -33,6 +34,14 @@ export default function Signup() {
     } else {
       console.log(name, email, password);
 
+      const db_data = JSON.parse(localStorage.getItem("db_data") || "[]");
+      const email_check = db_data.filter((data: any) => data.email === email);
+
+      if (email_check.length > 0) {
+        alert("Email already exists");
+        return;
+      }
+
           try {
             // await insertOne({
             //   collection: "users",
@@ -50,6 +59,7 @@ export default function Signup() {
             // })
 
             const document = {
+                  _id: uuidv4(),
                   username: name,
                   email: email,
                   password: password,
@@ -60,9 +70,10 @@ export default function Signup() {
                   ph_no: "",
                   gender: "",
                 }
-            
 
-            localStorage.setItem("db_data", JSON.stringify(document) );
+            db_data.push(document);
+
+            localStorage.setItem("db_data", JSON.stringify(db_data));
 
           } catch (error) {
             console.error(error);
