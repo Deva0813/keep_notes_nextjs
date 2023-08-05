@@ -1,4 +1,4 @@
-# Keep Notes App
+<!-- # Keep Notes App
 
 
 
@@ -115,4 +115,10 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 ## Contact
 - [LinkedIn](https://www.linkedin.com/in/devanand-m-9a22351b3/)
 - [Instagram](https://www.instagram.com/epic.dev/)
-- [Email](mailto:devanand151101@gmail.com)
+- [Email](mailto:devanand151101@gmail.com) -->
+
+
+# Keep Notes App
+
+### This is mockup of keep notes app for demo purpose
+#### don't use this app.
