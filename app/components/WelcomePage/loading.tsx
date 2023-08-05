@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import loadging from '../../public/loading.svg';
+import loadging from '../../../public/loading.svg';
 
 const WelcomePage = () => {
     return (

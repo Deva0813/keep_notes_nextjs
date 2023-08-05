@@ -56,8 +56,11 @@ export default function AboutPage() {
     const postMessage = async ()=>{
 
         try {
-            await insertOne(messageData)
-            alert("Message Sent Successfully")
+            // await insertOne(messageData)
+            // alert("Message Sent Successfully")
+
+            sessionStorage.setItem("messageData", JSON.stringify(messageData))
+
         } catch (error) {
             console.log(error)
         }

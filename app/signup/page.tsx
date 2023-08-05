@@ -34,20 +34,35 @@ export default function Signup() {
       console.log(name, email, password);
 
           try {
-            await insertOne({
-              collection: "users",
-              document: {
-                username: name,
-                email: email,
-                password: password,
-                notes: [],
-                firstname: "",
-                lastname: "",
-                age: "",
-                ph_no: "",
-                gender: "",
-              }
-            })
+            // await insertOne({
+            //   collection: "users",
+            //   document: {
+            //     username: name,
+            //     email: email,
+            //     password: password,
+            //     notes: [],
+            //     firstname: "",
+            //     lastname: "",
+            //     age: "",
+            //     ph_no: "",
+            //     gender: "",
+            //   }
+            // })
+
+            const document = {
+                  username: name,
+                  email: email,
+                  password: password,
+                  notes: [],
+                  firstname: "",
+                  lastname: "",
+                  age: "",
+                  ph_no: "",
+                  gender: "",
+                }
+            
+
+            localStorage.setItem("db_data", JSON.stringify(document) );
 
           } catch (error) {
             console.error(error);
@@ -55,11 +70,10 @@ export default function Signup() {
 
           window.location.href = "/login";
       }
-
       }
 
   function validateEmail(email: string) {
-          var re = /\S+@\S+\.\S+/;
+          let re = /\S+@\S+\.\S+/;
           return re.test(email);
         }
 
