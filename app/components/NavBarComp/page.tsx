@@ -30,9 +30,9 @@ export default function NavBarComp() {
   function loginHandler() {
     if (logedIn) {
       sessionStorage.clear();
-      window.location.href = "/";
+      window.location.href = "/keep_notes_nextjs/";
     } else {
-      window.location.href = "/login";
+      window.location.href = "/keep_notes_nextjs/login";
     }
   };
 
