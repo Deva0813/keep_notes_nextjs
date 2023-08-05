@@ -63,6 +63,11 @@ Deva
 
 </div>
 
+#### Live Demo : [Keep Notes App](https://deva0813.github.io/keep_notes_nextjs/)
+
+> [!NOTE]  
+> The live demo is hosted on GitHub Pages and the data is stored in localStorage and sessionStorage. So, the data will be lost when the page is refreshed or when the browser is closed. To experience the full functionality of the app, please clone the repo and run it locally.
+
 ## Getting started
 This project was bootstrapped with [Next.js](https://nextjs.org/).
 
