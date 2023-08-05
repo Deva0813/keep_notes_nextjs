@@ -57,6 +57,12 @@ Deva
 
 ## Demo
 
+<div align="center" >
+&ensp;
+<img src="public/keep-notes.gif" />
+
+</div>
+
 ## Getting started
 This project was bootstrapped with [Next.js](https://nextjs.org/).
 
