@@ -31,16 +31,16 @@ Deva
 ## Tech Stack
 
 <div align="center" >
-
-<img src="public/Nextjs-logo.png" height="20"   > 
+<br/>
+<img src="public/nextjsreadme.png" height="50"   > 
 &ensp;
 <img src="public/react_readmeImg.png" height="50" >
 &ensp;
-<img src="public/tailwindcss.png" height="40" >
+<img src="public/tailwindcssreadme.png" height="50" >
 &ensp;
-<img src="public/MongoDB_Logo.png" height="40" >
+<img src="public/MongoDB_Logoreadme.png" height="50" >
 &ensp;
-<img src="public/node.png" height="40" >
+<img src="public/nodereadme.png" height="50" >
 
 </div>
 
