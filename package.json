@@ -2,6 +2,7 @@
   "name": "keep_notes_nextjs",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://deva0813.github.io/keep_notes_nextjs",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
