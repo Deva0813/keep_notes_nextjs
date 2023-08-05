@@ -30,17 +30,21 @@ Deva
 
 ## Tech Stack
 
-<div style="background:white; border-radius:10px; padding:30px 10px; display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap " >
-<img src="public/Nextjs-logo.png" height="20" > 
+<div align="center" >
+
+<img src="public/Nextjs-logo.png" height="20"   > 
 &ensp;
-<img src="public/react.png" height="50" >
+<img src="public/react_readmeImg.png" height="50" >
 &ensp;
 <img src="public/tailwindcss.png" height="40" >
 &ensp;
 <img src="public/MongoDB_Logo.png" height="40" >
 &ensp;
 <img src="public/node.png" height="40" >
+
 </div>
+
+
 
 ## Table of Contents
 - [Demo](#demo)
