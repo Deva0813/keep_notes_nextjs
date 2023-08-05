@@ -104,7 +104,7 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ## License
 
-[Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/) © [Deva](https://github.com/Deva0813)  <br/>
+[MIT](https://choosealicense.com/licenses/mit/) © [Deva](https://github.com/Deva0813)  <br/>
 
 ## Contact
 - [LinkedIn](https://www.linkedin.com/in/devanand-m-9a22351b3/)
