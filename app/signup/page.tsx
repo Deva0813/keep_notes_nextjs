@@ -79,7 +79,7 @@ export default function Signup() {
             console.error(error);
           }
 
-          window.location.href = "/login";
+          window.location.href = "/keep_notes_nextjs/login";
       }
       }
 
@@ -125,7 +125,7 @@ export default function Signup() {
 
                 <div className="flex items-center justify-center w-80 mt-5 mb-6">
                   <button className="m-2 bg-green-400 w-32 h-10 rounded-xl pointer hover:bg-green-300" onClick={signup} >Register</button>
-                  <button className="m-2 bg-btn_add-500 w-32 h-10 rounded-xl pointer hover:bg-btn_add-400" onClick={() => { window.location.href = "/login" }} >Login</button>
+                  <button className="m-2 bg-btn_add-500 w-32 h-10 rounded-xl pointer hover:bg-btn_add-400" onClick={() => { window.location.href = "/keep_notes_nextjs/login" }} >Login</button>
                 </div>
 
               </div>

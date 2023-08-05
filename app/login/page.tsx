@@ -20,7 +20,7 @@ export default function Login() {
       window.sessionStorage.setItem('logedIn', 'true');
       window.sessionStorage.setItem('email', userdata.email);
       window.sessionStorage.setItem('password', userdata.password);
-      window.location.href = "/notes";
+      window.location.href = "/keep_notes_nextjs/notes";
     }
     console.log(userdata);
   }, [userdata]);
@@ -96,7 +96,7 @@ export default function Login() {
 
             <div className="flex items-center justify-center w-80 mt-5 mb-6">
               <button className="m-2 bg-btn_add-500 w-32 h-10 rounded-xl pointer hover:bg-btn_add-400" onClick={login} >Login</button>
-              <button className="m-2 text-header_text bg-color1-500 w-32 h-10 rounded-xl pointer hover:bg-color1-400" onClick={() => { window.location.href = "/signup"; }} >Register</button>
+              <button className="m-2 text-header_text bg-color1-500 w-32 h-10 rounded-xl pointer hover:bg-color1-400" onClick={() => { window.location.href = "/keep_notes_nextjs/signup"; }} >Register</button>
             </div>
 
           </div>

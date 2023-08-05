@@ -265,7 +265,7 @@ export default function Account() {
 
         if (db_data) {
             alert("Account Deleted Successfully!");
-            window.location.href = "/";
+            window.location.href = "/keep_notes_nextjs/";
             window.sessionStorage.clear();
         }
 
