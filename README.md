@@ -52,7 +52,6 @@ Deva
 - [Project Requirements](#project-requirements)
 - [Installation](#installation)
 - [Contributing](#contributing)
-- [License](#license)
 - [Contact](#contact)
 
 ## Demo
@@ -112,10 +111,6 @@ This project was bootstrapped with [Next.js](https://nextjs.org/).
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/) © [Deva](https://github.com/Deva0813)  <br/>
 
 ## Contact
 - [LinkedIn](https://www.linkedin.com/in/devanand-m-9a22351b3/)
